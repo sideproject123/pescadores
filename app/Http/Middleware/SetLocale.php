@@ -2,7 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Foundation\Application\App;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cookie;
 use Closure;
 
 class SetLocale
@@ -16,10 +17,12 @@ class SetLocale
    */
   public function handle($request, Closure $next)
   {
-    
-    echo '<pre>';
-    echo 'locale : <br />';
-    print_r(App); 
+    $this->set(Cookie::get('lc'));
     return $next($request);
+  }
+
+  public function set($lc)
+  {
+    App::setLocale($lc);
   }
 }

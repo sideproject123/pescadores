@@ -1,6 +1,16 @@
+var Cookie = require('js-cookie');
+
+function App(o) {
+  o.find('#locale').change(function(e) {
+    var value = e.target.value;
+
+    Cookie.set('lc', value);
+    location.reload();
+  });
+}
+
 function Header(o) {
-  console.log('o ==================>', o);
-};
+}
 
 $(function () {
   'use strict';
@@ -26,7 +36,8 @@ $(function () {
   };
 
   var doms = {
-    header: Header
+    header: Header,
+    app: App,
   };
 
   executeFnIfExist(doms);
