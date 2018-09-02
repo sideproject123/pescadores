@@ -88,7 +88,9 @@ function App(o) {
   });
 }
 
-function Header(o) {}
+function Header(o) {
+  console.log('in Header');
+}
 
 $(function () {
   'use strict';
