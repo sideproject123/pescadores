@@ -4,5 +4,9 @@
   <div id="app">
     @include('shared.header');
     {{ $msg }} 
+    <br />
+    {{ __('landing.banner') }}
+    <br />
+    {{ __('landing.logo') }}
   </div>
 @include('shared.after_footer')

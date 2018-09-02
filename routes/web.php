@@ -18,6 +18,8 @@ Route::get('/', function () {
   ]);
 });
 
+Route::get('/dbtest', 'DBTest@show');
+
 Route::get('/phpinfo', function () {
   phpinfo();
 });
