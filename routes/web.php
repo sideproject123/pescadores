@@ -23,3 +23,5 @@ Route::get('/dbtest', 'DBTest@show');
 Route::get('/phpinfo', function () {
   phpinfo();
 });
+
+Route::get('/order', 'ControlPanelView@show');
