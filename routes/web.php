@@ -24,4 +24,8 @@ Route::get('/phpinfo', function () {
   phpinfo();
 });
 
-Route::get('/admin', 'Admin');
+// Route::get('/admin', 'Admin');
+
+Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
+  Route::get('/admin', 'Ship');
+});
