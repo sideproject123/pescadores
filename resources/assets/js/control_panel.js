@@ -1,13 +1,34 @@
 function Ferry() {};
-/*
-Ferry.prototype.run = function() {
+
+Ferry.prototype.destination = function (o) {
+  var destEl = o.find('[name="name"]')[0];
+  o.find('[data-fn="submit"]').click(function (e) {
+    var name = $(destEl).val();
+    name = $.trim(name);
+    
+    if (name.length === 0) {
+      alert('empty string');
+      return;
+    }
+
+    var data = {
+      name,
+    };
+
+    $.post('/api/ferry', data)
+      .done(function (res) {
+        console.log('res ===============>', res);
+      });
+  });
+};
+
+Ferry.prototype.run = function () {
   console.log('sections ==========>', this.sections);
 };
-*/
 
 $(function () {
   'use strict';
-  var executeFnIfExist = function(arg = {}) {
+  var executeFnIfExist = function (arg = {}) {
     for (var key in arg) {
       var o = $('#' + key);
       var fn = arg[key];
@@ -26,10 +47,18 @@ $(function () {
         console.warn('DOM: ' + key + ' more than one');
       }
 
-      var obj = this;
-      
-      console.log('obj =================>', obj);
-      // fn(o);
+      var obj = new fn;
+      obj.o = o;
+      obj.el = o[0];
+      obj.sections = o.find('[section]');
+      obj.sections.each(function (i, sec) {
+        var m = obj[$(sec).attr('section')];
+
+        if (typeof m === 'function') {
+          m($(sec));
+        }
+      });
+      obj.run();
     }
   };
 
