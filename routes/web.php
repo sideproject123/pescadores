@@ -62,3 +62,9 @@ Route::group(['prefix' => 'ferry'], function () {
     return view('control_panel_ferry_edit', $params);
   });
 });
+
+// Route::get('/admin', 'Admin');
+
+Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
+  Route::get('/admin', 'Ship');
+});
