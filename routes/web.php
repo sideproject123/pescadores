@@ -12,16 +12,9 @@
 */
 
 Route::get('/', function () {
-  return view('landing', [
-    'title' => 'from subview',
-    'msg' => 'hello world'
-  ]);
+  return view('order');
 });
 
 Route::get('/dbtest', 'DBTest@show');
-
-Route::get('/phpinfo', function () {
-  phpinfo();
-});
 
 Route::get('/order', 'ControlPanelView@show');
