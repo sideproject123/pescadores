@@ -1,0 +1,42 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// normalize
+@import "~normalize.css/normalize";
+
+html, body {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+#app {
+  > .content {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+#header {
+  border: 1px solid #f00;
+  height: 100px;
+  overflow: hidden;
+}
+
+.sidebar {
+  border: 1px solid #0f0;
+  width: 25%;
+}
+
+.main {
+  border: 1px solid #00f;
+  width: 75%;
+}
