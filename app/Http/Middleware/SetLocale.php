@@ -18,8 +18,6 @@ class SetLocale
   public function handle($request, Closure $next)
   {
     $this->set(Cookie::get('lc'));
-    echo '<pre>';
-    echo 'in setLocale Middleware';
     return $next($request);
   }
 

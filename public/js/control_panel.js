@@ -74,9 +74,8 @@ module.exports = __webpack_require__(6);
 /***/ }),
 
 /***/ 6:
-/***/ (function(module, __webpack_exports__) {
+/***/ (function(module, exports) {
 
-"use strict";
 function Ferry() {};
 
 Ferry.prototype.destination = function (o) {
@@ -94,7 +93,7 @@ Ferry.prototype.destination = function (o) {
       name: name
     };
 
-    $.post('/api/ferry', data).done(function (res) {
+    $.post('/api/destinations', data).done(function (res) {
       console.log('res ===============>', res);
     });
   });

@@ -15,7 +15,7 @@ Ferry.prototype.destination = function (o) {
       name,
     };
 
-    $.post('/api/ferry', data)
+    $.post('/api/destinations', data)
       .done(function (res) {
         console.log('res ===============>', res);
       });
