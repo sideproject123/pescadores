@@ -8726,8 +8726,39 @@ template {
   display: none;
 }
 
-#app {
-  background-color: #0f0;
-  padding: 20px;
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html,
+body {
+  background-color: transparent;
+}
+
+#header {
+  border: 1px solid #f00;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  padding: 14px 0 14px 80px;
+}
+
+#header .link-wrap {
+  margin-left: 68px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#header .link-wrap .link {
+  margin-right: 45px;
 }
 
