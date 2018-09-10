@@ -5,7 +5,7 @@ installation
 * git clone project
 * run command: composer install
 * run command: npm install
-* run command: php artisan key:generate
 * copy .env-example .env
+* run command: php artisan key:generate
 * modify database info in .env
 * run command: php artisan serve
