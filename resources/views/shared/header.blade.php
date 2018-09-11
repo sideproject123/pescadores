@@ -10,5 +10,14 @@
     <li class="link">
       <a href="">{{ __('site.route_n_fare') }}</a>
     </li>
+    <li class="link">
+      <a href="">{{ __('site.latest_news') }}</a>
+    </li>
+    <li class="link">
+      <a href="">{{ __('site.about_pescadores') }}</a>
+    </li>
+    <li class="link">
+      <a href="">{{ __('site.contact_us') }}</a>
+    </li>
   </ul>
 </div>

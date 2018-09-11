@@ -21,7 +21,6 @@ html, body {
 }
 
 #header {
-  border: 1px solid #f00;
   display: flex;
   align-items: stretch;
   padding: 14px 0 14px 80px;
@@ -32,6 +31,50 @@ html, body {
     align-items: center;
     .link {
       margin-right: 45px;
+    }
+  }
+}
+
+#footer {
+  padding:44px 0 76px 0;
+  background-color: #2B54BC;
+
+  .list {
+    text-align: center;
+
+    .item {
+      margin-right: 48px;
+      display: inline-block;
+      vertical-align: top;
+      text-align: left;
+      color: #fff;
+
+      .order {
+        display: inline-block;
+        margin-top: 40px;
+        border-radius: 3px; 
+        padding: 12px 40px;
+        background-color: #f00;
+        color: #fff;
+        box-sizing: border-box;
+      }
+
+      .title, .link, .info {
+        display: block;
+        margin-bottom: 14px;
+      }
+
+      .link, .info {
+        font-size: 12px;
+      }
+
+      .title {
+        font-size: 16px; 
+      }
+
+      .info {
+        margin-bottom: 4px;
+      }
     }
   }
 }

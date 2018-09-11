@@ -8726,6 +8726,10 @@ template {
   display: none;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -8738,7 +8742,6 @@ body {
 }
 
 #header {
-  border: 1px solid #f00;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8760,5 +8763,53 @@ body {
 
 #header .link-wrap .link {
   margin-right: 45px;
+}
+
+#footer {
+  padding: 44px 0 76px 0;
+  background-color: #2B54BC;
+}
+
+#footer .list {
+  text-align: center;
+}
+
+#footer .list .item {
+  margin-right: 48px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  color: #fff;
+}
+
+#footer .list .item .order {
+  display: inline-block;
+  margin-top: 40px;
+  border-radius: 3px;
+  padding: 12px 40px;
+  background-color: #f00;
+  color: #fff;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#footer .list .item .title,
+#footer .list .item .link,
+#footer .list .item .info {
+  display: block;
+  margin-bottom: 14px;
+}
+
+#footer .list .item .link,
+#footer .list .item .info {
+  font-size: 12px;
+}
+
+#footer .list .item .title {
+  font-size: 16px;
+}
+
+#footer .list .item .info {
+  margin-bottom: 4px;
 }
 
