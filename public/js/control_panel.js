@@ -76,9 +76,9 @@ module.exports = __webpack_require__(6);
 /***/ 6:
 /***/ (function(module, exports) {
 
-function Ferry() {};
+function Cruise() {};
 
-Ferry.prototype.destination = function (o) {
+Cruise.prototype.destination = function (o) {
   var destEl = o.find('[name="name"]')[0];
   o.find('[data-fn="submit"]').click(function (e) {
     var name = $(destEl).val();
@@ -99,7 +99,7 @@ Ferry.prototype.destination = function (o) {
   });
 };
 
-Ferry.prototype.run = function () {
+Cruise.prototype.run = function () {
   console.log('sections ==========>', this.sections);
 };
 
@@ -143,7 +143,7 @@ $(function () {
   };
 
   var doms = {
-    Ferry: Ferry
+    Cruise: Cruise
   };
 
   executeFnIfExist(doms);

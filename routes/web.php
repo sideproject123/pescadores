@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*
 Route::get('/', function () {
   $all = '{
     "functions": [
@@ -30,41 +31,11 @@ Route::get('/', function () {
 
 Route::get('/dbtest', 'DBTest@show');
 
-Route::group(['prefix' => 'ferry'], function () {
-  $json = '{
-    "functionId": "Ferry",
-    "functions": [
-      {
-        "name": "Order",
-        "displayName": "訂單系統"
-      },
-      {
-        "name": "Ferry",
-        "displayName": "船班設定"
-      }
-    ],
-    "subFunctions": [
-      {
-        "name": "edit",
-        "displayName": "航點 \/ 航段 設定"
-      }
-    ]
-  }';
-
-  $obj = json_decode($json);
-  $params = [
-    'functions' => $obj->functions,
-    'functionId' => $obj->functionId,
-    'subFunctions' => $obj->subFunctions,
-  ];
-
-  Route::get('edit', function () use ($params) {
-    return view('control_panel_ferry_edit', $params);
-  });
-});
-
-// Route::get('/admin', 'Admin');
-
 Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
   Route::get('/admin', 'Ship');
+});
+*/
+
+Route::group(['prefix' => 'cruise'], function () {
+  Route::get('edit_dest', 'CruiseController@editDest');
 });

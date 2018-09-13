@@ -6,20 +6,20 @@
         <ul class="functions">
         @foreach ($functions as $fn)
           <li>
-            <a href="{{ $fn->name }}" target="_self">{{ $fn->displayName }}</a>
+            <a href="{{ $fn['name'] }}" target="_self">{{ $fn['displayName'] }}</a>
           </li>   
         @endforeach
         </ul>
       </div>
       <div class="main">
         <ul class="sub-functions">
-        @foreach ($subFunctions as $subFn)
+        @foreach ($function['subFunctions'] as $fn)
           <li>
-            <a href="{{ $subFn->name }}" target="_self">{{ $subFn->displayName }}</a>
+            <a href="{{ $fn['name'] }}" target="_self">{{ $fn['displayName'] }}</a>
           </li>   
         @endforeach
         </ul>
-        <div id="{{ $functionId }}">
+        <div id="{{ $function['id'] }}">
           @yield('main')
         </div>
       </div>

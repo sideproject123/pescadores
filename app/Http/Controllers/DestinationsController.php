@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Destinations;
 use Illuminate\Http\Request;
+use \Illuminate\Database\QueryException;
 
 class DestinationsController extends Controller
 {
@@ -12,9 +13,9 @@ class DestinationsController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(Destinations $destinations)
+  public function index()
   {
-    return response()->json(['data' => $this->getAll($destinations)]);
+    return response()->json(['data' => $this->getAll()]);
   }
 
   /**
@@ -33,18 +34,25 @@ class DestinationsController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request)
+  public function store(Request $request, Destinations $destinations)
   {
-    echo 'wtf';
+    echo $request->name;
+    $destinations->name = $request->name;
+    $destinations->status = 1;
+    try {
+      $destinations->save();
+    } catch (QueryException $e) {
+      return $e->errorInfo;
+    }
   }
 
   /**
    * Display the specified resource.
    *
-   * @param  \App\Destination  $destination
+   * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function show(Destination $destination)
+  public function show(Destinations $destinations)
   {
       //
   }
@@ -52,10 +60,10 @@ class DestinationsController extends Controller
   /**
    * Show the form for editing the specified resource.
    *
-   * @param  \App\Destination  $destination
+   * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function edit(Destination $destination)
+  public function edit(Destinations $destinations)
   {
       //
   }
@@ -64,10 +72,10 @@ class DestinationsController extends Controller
    * Update the specified resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
-   * @param  \App\Destination  $destination
+   * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Destination $destination)
+  public function update(Request $request, Destinations $destinations)
   {
       //
   }
@@ -75,16 +83,16 @@ class DestinationsController extends Controller
   /**
    * Remove the specified resource from storage.
    *
-   * @param  \App\Destination  $destination
+   * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Destination $destination)
+  public function destroy(Destinations $destinations)
   {
       //
   }
 
-  public function getAll(Destinations $destinations)
+  public function getAll()
   {
-    return $destinations->all();
+    return Destinations::all();
   }
 }
