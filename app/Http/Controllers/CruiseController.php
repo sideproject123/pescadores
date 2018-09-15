@@ -37,11 +37,15 @@ class CruiseController extends Controller
 
     $dest = new DestinationsController();
     $params = json_decode($json, true);
-    $params['data'] = json_decode(json_encode($dest->getAll()));
-
+    $params['data'] = $dest->getAll();
+    $params['cols'] = array(
+      array('title' => '名稱', 'field' => 'name'),
+      array('title' => '', 'field' => 'status')
+    );
     /*
     echo '<pre>';
-    print_r($params);
+    // print_r($params);
+    print_r(json_encode($dest->getAll()));
     */
 
     return view('control_panel_cruise_edit_dest', $params);

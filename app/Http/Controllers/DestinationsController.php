@@ -36,7 +36,7 @@ class DestinationsController extends Controller
    */
   public function store(Request $request, Destinations $destinations)
   {
-    echo $request->name;
+    /*
     $destinations->name = $request->name;
     $destinations->status = 1;
     try {
@@ -44,6 +44,7 @@ class DestinationsController extends Controller
     } catch (QueryException $e) {
       return $e->errorInfo;
     }
+    */
   }
 
   /**
@@ -75,9 +76,29 @@ class DestinationsController extends Controller
    * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Destinations $destinations)
+  public function update($id, Request $request, Destinations $destinations)
   {
-      //
+    try {
+      $d = $destinations->find($id);
+
+      switch ($request->action) {
+        case 'enable':
+          $s = 1;
+          break;
+        case 'disable':
+          $s = 0;
+          break;
+      }
+
+      if (!isset($s)) {
+        return response('', 400);
+      }
+
+      $d->status = $s;
+      $d->save();
+    } catch (QueryException $e) {
+      return $e->errorInfo;
+    }
   }
 
   /**

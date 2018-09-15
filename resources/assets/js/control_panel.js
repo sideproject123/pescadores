@@ -1,34 +1,16 @@
-function Cruise() {};
+'use strict';
+require('./bootstrap');
+const { datatables } = require('./global');
 
-Cruise.prototype.destination = function (o) {
-  var destEl = o.find('[name="name"]')[0];
-  o.find('[data-fn="submit"]').click(function (e) {
-    var name = $(destEl).val();
-    name = $.trim(name);
-    
-    if (name.length === 0) {
-      alert('empty string');
-      return;
-    }
-
-    var data = {
-      name,
-    };
-
-    $.post('/api/destinations', data)
-      .done(function (res) {
-        console.log('res ===============>', res);
-      });
-  });
-};
-
-Cruise.prototype.run = function () {
-  console.log('sections ==========>', this.sections);
+var doms = {
+  Cruise: require('./control_panel/Cruise')
 };
 
 $(function () {
-  'use strict';
-  var executeFnIfExist = function (arg = {}) {
+
+  $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
+
+  const executeFnIfExist = function (arg = {}) {
     for (var key in arg) {
       var o = $('#' + key);
       var fn = arg[key];
@@ -58,14 +40,12 @@ $(function () {
           m($(sec));
         }
       });
-      obj.run();
-    }
-  };
 
-  var doms = {
-    Cruise,
+      if (typeof obj.run === 'function') {
+        obj.run();
+      }
+    }
   };
 
   executeFnIfExist(doms);
 });
-

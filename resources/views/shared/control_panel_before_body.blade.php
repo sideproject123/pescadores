@@ -7,6 +7,5 @@
   <title>{{ __('title') }}</title>
   <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
   <link href="{{ asset('css/control_panel.css') }}" rel="stylesheet" type="text/css">
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>

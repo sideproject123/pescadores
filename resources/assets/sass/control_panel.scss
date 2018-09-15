@@ -10,6 +10,18 @@
 // normalize
 @import "~normalize.css/normalize";
 
+// jquery-ui
+@import "~jquery-ui/themes/base/core";
+@import "~jquery-ui/themes/base/theme";
+
+// datatables
+@import "~datatables.net-dt/css/jquery.dataTables.min.css";
+
+// tabulator
+/*
+@import "~jquery.tabulator/src/scss/tabulator";
+*/
+
 html, body {
   height: 100%;
 }

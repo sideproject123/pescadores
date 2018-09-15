@@ -18,6 +18,11 @@
         "lodash": "^4.17.4"
     },
     "dependencies": {
+        "datatables.net": "^1.10.19",
+        "datatables.net-dt": "^1.10.19",
+        "jquery-ui": "^1.12.1",
+        "jquery-ui-themes": "^1.12.0",
+        "jquery.tabulator": "^3.5.3",
         "js-cookie": "^2.2.0",
         "normalize.css": "^8.0.0"
     }
