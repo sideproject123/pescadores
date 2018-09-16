@@ -8,19 +8,16 @@
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
 // normalize
-@import "~normalize.css/normalize";
+@import "~normalize.css/normalize.css";
 
 // jquery-ui
-@import "~jquery-ui/themes/base/core";
-@import "~jquery-ui/themes/base/theme";
+@import "~jquery-ui/themes/base/core.css";
+@import "~jquery-ui/themes/base/theme.css";
+@import "~jquery-ui/themes/base/datepicker.css";
+@import "~jquery-timepicker/jquery.timepicker.css";
 
 // datatables
 @import "~datatables.net-dt/css/jquery.dataTables.min.css";
-
-// tabulator
-/*
-@import "~jquery.tabulator/src/scss/tabulator";
-*/
 
 html, body {
   height: 100%;
@@ -28,6 +25,20 @@ html, body {
 
 body {
   min-height: 100%;
+}
+
+.datepicker-wrap {
+  .calendar {
+    width: 40px;
+    cursor: pointer;
+  }
+}
+
+.timepicker-wrap {
+  .clock {
+    width: 40px;
+    cursor: pointer;
+  }
 }
 
 #app {

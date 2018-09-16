@@ -1,14 +1,23 @@
 'use strict';
 require('./bootstrap');
-const { datatables } = require('./global');
+const Cruise = require('./control_panel/Cruise');
 
-var doms = {
-  Cruise: require('./control_panel/Cruise')
+const doms = {
+  Cruise,
 };
 
+
 $(function () {
+  require('jquery-ui/ui/i18n/datepicker-zh-TW');
+
+  const {
+    datatables,
+  } = require('./global');
 
   $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
+  $.datepicker.setDefaults({
+    minDate: new Date(),
+  });
 
   const executeFnIfExist = function (arg = {}) {
     for (var key in arg) {
@@ -29,7 +38,16 @@ $(function () {
         console.warn('DOM: ' + key + ' more than one');
       }
 
-      var obj = new fn;
+      const obj = new fn;
+
+      Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(function (key) {
+        if (key === 'constructor') {
+          return;
+        }
+        
+        obj[key] = obj[key].bind(obj);
+      });
+
       obj.o = o;
       obj.el = o[0];
       obj.sections = o.find('[section]');

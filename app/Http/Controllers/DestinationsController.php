@@ -36,15 +36,25 @@ class DestinationsController extends Controller
    */
   public function store(Request $request, Destinations $destinations)
   {
-    /*
-    $destinations->name = $request->name;
-    $destinations->status = 1;
     try {
+      $destinations->name = $request->name;
       $destinations->save();
+        
+      if ($request->withResult) {
+        $all = $destinations->all();
+
+        switch ($request->withResult) {
+          case 'table':
+            return view('cruise.destinations_table', ['data' => $all]);
+          case 'data':
+            return response()->json($all);
+        }
+      }
+
+      return '';
     } catch (QueryException $e) {
       return $e->errorInfo;
     }
-    */
   }
 
   /**
@@ -81,11 +91,11 @@ class DestinationsController extends Controller
     try {
       $d = $destinations->find($id);
 
-      switch ($request->action) {
-        case 'enable':
+      switch ($request->value) {
+        case '1':
           $s = 1;
           break;
-        case 'disable':
+        case '0':
           $s = 0;
           break;
       }

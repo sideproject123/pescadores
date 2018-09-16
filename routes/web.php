@@ -38,4 +38,5 @@ Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
 
 Route::group(['prefix' => 'cruise'], function () {
   Route::get('edit_dest', 'CruiseController@editDest');
+  Route::get('edit_route', 'CruiseController@editRoute');
 });

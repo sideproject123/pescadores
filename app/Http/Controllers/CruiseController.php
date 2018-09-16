@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\DestinationsController;
+use App\Destinations;
+use App\Ferries;
 
 class CruiseController extends Controller
 {
-  public function editDest(Request $request)
+  public function __construct()
   {
     $json = '{
       "functions": [
@@ -35,18 +37,41 @@ class CruiseController extends Controller
       }
     }';
 
-    $dest = new DestinationsController();
-    $params = json_decode($json, true);
-    $params['data'] = $dest->getAll();
+    $this->params = json_decode($json, true);
+  }
+
+  public function editRoute(Request $request)
+  {
+    $params = $this->params;
+    $dests = Destinations::all();
+
+    foreach ($dests as $item) {
+      $item->value = $item->id;
+      $item->displayName = $item->name;
+    }
+
+    $params['destinations'] = $dests;
+
+    $ferries = Ferries::all();
+
+    foreach ($ferries as $item) {
+      $item->value = $item->id;
+      $item->displayName = $item->name;
+    }
+
+    $params['ferries'] = $ferries;
+
+    return view('control_panel_cruise_edit_route', $params);
+  }
+
+  public function editDest(Request $request)
+  {
+    $params = $this->params;
+    $params['data'] = Destinations::all();
     $params['cols'] = array(
       array('title' => '名稱', 'field' => 'name'),
       array('title' => '', 'field' => 'status')
     );
-    /*
-    echo '<pre>';
-    // print_r($params);
-    print_r(json_encode($dest->getAll()));
-    */
 
     return view('control_panel_cruise_edit_dest', $params);
   }
