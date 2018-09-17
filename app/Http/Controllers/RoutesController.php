@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Routes;
-use Exception;
 use Illuminate\Http\Request;
+use Validator;
 
 class RoutesController extends Controller
 {
@@ -29,30 +29,6 @@ class RoutesController extends Controller
   }
 
   /**
-   * validate parameters before inserting a new record.
-   * @param  \Illuminate\Http\Request  $request
-   * @return boolean
-   */
-  public function validation($request)
-  {
-    if (
-      !$request->from
-      || !$request->to
-      || !$request->fId
-      || !$request->datetime
-      || $request->from === $request->to
-    ) {
-      return false;
-    }
-
-    if (!preg_match('/^[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}$/', $request->datetime)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -60,39 +36,41 @@ class RoutesController extends Controller
    */
   public function store(Request $request)
   {
-    if (!$this->validation($request)) {
-      return response('', 400);
+    $validator = Validator::make($request->all(), [
+      'from' => 'required|digits_between:1,3',
+      'to' => 'required|digits_between:1,3',
+      'fId' => 'required|digits_between:1,3',
+      'fId' => 'required|digits_between:1,3',
+      'dt' => 'required|date_format:"Y-m-d H:i:s"',
+    ]);
+
+    if ($validator->fails()) {
+      $e = $validator->errors()->first();
+      return response($e, 422);
     }
 
-    try {
-      if ($request->id) {
-        echo 'wtf';
-      } else {
-        Routes::firstOrCreate([
-          'fromDestinationId' => $request->from,
-          'toDestinationId' => $request->to,
-          'datetime' => $request->datetime,
-          'ferryId' => $request->fId,
-        ]);
-      }
-
-      if ($request->withResult) {
-        $all = Routes::all();
-
-        switch ($request->withResult) {
-          case 'table':
-            return view('cruise.routes_table', ['data' => $all]);
-          case 'data':
-            return response()->json($all);
-        }
-      }
-
-      return '';
-    } catch (QueryException $e) {
-      // return $e->errorInfo;
-      // return $e->errorInfo;
-      return '';
+    if ($request->from === $request->to) {
+      return response('from and to are the same', 422);
     }
+
+    Routes::firstOrCreate([
+      'fromDestinationId' => $request->from,
+      'toDestinationId' => $request->to,
+      'datetime' => $request->dt,
+      'ferryId' => $request->fId,
+    ]);
+
+    if ($request->withResult) {
+      $all = Routes::all();
+
+      switch ($request->withResult) {
+        case 'data':
+        default:
+          return response()->json($all);
+      }
+    }
+
+    return '';
   }
 
   /**

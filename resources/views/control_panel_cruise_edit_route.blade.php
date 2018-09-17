@@ -1,6 +1,6 @@
 @extends('layouts.control_panel')
 @section('main')
-<div class="routes" section="routes">
+<div class="edit-route" section="editRoute">
   <div class="destination">
     <span class="title">啟點</span>
     @include('shared.selection', ['list' => $destinations, 'fn' => 'fromDest'])

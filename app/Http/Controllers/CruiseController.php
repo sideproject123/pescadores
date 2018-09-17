@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DestinationsController;
 use App\Destinations;
 use App\Ferries;
+use App\Routes;
 
 class CruiseController extends Controller
 {
@@ -25,6 +26,10 @@ class CruiseController extends Controller
       "function": {
         "id": "Cruise",
         "subFunctions": [
+          {
+            "name": "list_routes",
+            "displayName": "航班總覽"
+          },
           {
             "name": "edit_dest",
             "displayName": "航點設定"
@@ -74,5 +79,13 @@ class CruiseController extends Controller
     );
 
     return view('control_panel_cruise_edit_dest', $params);
+  }
+
+  public function routeList(Request $request)
+  {
+    $params = $this->params;
+    $params['routes'] = Routes::all();
+
+    return view('control_panel_cruise_list_routes', $params);
   }
 }

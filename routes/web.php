@@ -29,14 +29,13 @@ Route::get('/', function () {
   return view('order', ['functions' => $obj->functions]);
 });
 
-Route::get('/dbtest', 'DBTest@show');
-
 Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
   Route::get('/admin', 'Ship');
 });
 */
 
 Route::group(['prefix' => 'cruise'], function () {
-  Route::get('edit_dest', 'CruiseController@editDest');
-  Route::get('edit_route', 'CruiseController@editRoute');
+  Route::get('editDest', 'CruiseController@editDest');
+  Route::get('editRoute', 'CruiseController@editRoute');
+  Route::get('routeList', 'CruiseController@routeList');
 });

@@ -71,7 +71,6 @@ class Cruise {
 
       $.post('/api/destinations', data)
         .done(res => {
-          console.log('res =================>', res);
           destTblWrap
             .empty()
             .html(res);
@@ -120,7 +119,7 @@ class Cruise {
         from: fromDestSel.val(),
         to: toDestSel.val(),
         fId: ferrySel.val(),
-        datetime: `${date} ${time}`,
+        dt: `${date} ${time}`,
       };
 
       $.post('/api/routes', data)
@@ -130,95 +129,5 @@ class Cruise {
     });
   }
 }
-/*
-function Cruise() {};
-
-Cruise.prototype.setDestinationsTable = function () {
-  this.destTbl = this.destTblWrap.find('[data-table-id="destinations"]')
-    .click(({ target }) => {
-      const t = $(target);
-      const action = t.data('action');
-      const id = t.data('id');
-
-      $.ajax({
-        url: `/api/destinations/${id}`,
-        method: 'PUT',
-        data: {
-          action,
-          withAction: true,
-        },
-      })
-      .done(res => {
-        console.log('change class ===================>', res);
-      });
-    })
-    .DataTable({
-      order: [[1, 'asc']],
-    });
-};
-
-Cruise.prototype.destinations = function (o) {
-  const destEl = o.find('[name="name"]')[0];
-  const destTblWrap = o.find('[data-table-wrap]');
-
-  console.log('destTblWrap ==============>', destTblWrap);
-  o.find('[data-fn="submit"]').click(function (e) {
-    let name = $(destEl).val();
-    name = $.trim(name);
-    
-    if (name.length === 0) {
-      alert('empty string');
-      return;
-    }
-
-    const data = {
-      name,
-    };
-
-    $.post('/api/destinations', data)
-      .done(function (res) {
-        console.log('res =================>', res);
-        destTblWrap.empty().html(res);
-        Cruise.setDestinationsTable(destTblWrap); 
-        /*
-        const data = res.map(item => Object.values(item));
-        console.log('data =================>', data);
-        console.log('columns =============>', tbl.columns().data());
-        */
-        /*
-        tbl.clear().rows.add(data).draw(false);
-        tbl.DataTable({
-          destroy: true,
-          columns: [
-            { data: 'id'
-          ]
-        })
-      });
-  });
-
-  this.setDestinationsTable(destTblWrap);
-  const tbl = o.find('[data-table-id="destinations"]')
-    .click(({ target }) => {
-      const t = $(target);
-      const action = t.data('action');
-      const id = t.data('id');
-
-      $.ajax({
-        url: `/api/destinations/${id}`,
-        method: 'PUT',
-        data: {
-          action,
-          withAction: true,
-        },
-      })
-      .done(res => {
-        console.log('change class ===================>', res);
-      });
-    })
-    .DataTable({
-      order: [[1, 'asc']],
-    });
-};
-*/
 
 module.exports = Cruise;
