@@ -5,7 +5,7 @@
     data-fn="{{ isset($fn) ? $fn : '' }}"
   >
   @foreach ($list as $item)
-    <option class="item" value="{{ $item['value'] }}">{{ $item['displayName'] }}</option>
+    <option class="item" value="{{ $item['value'] }}" {{ $selected === $item['value'] ? 'selected' : '' }}>{{ $item['displayName'] }}</option>
   @endforeach
   </select>
 </div>

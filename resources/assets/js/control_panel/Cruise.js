@@ -80,9 +80,10 @@ class Cruise {
     });
   }
 
-  routes(o) {
+  editRoute(o) {
     const dp = o.find('[data-fn="datepicker"]').datepicker();
     const tp = o.find('[data-fn="timepicker"]').timepicker(timepicker);
+    const rId = o.find('[name="rId"]').val();
     const fromDestSel = o.find('[data-fn="fromDest"]');
     const toDestSel = o.find('[data-fn="toDest"]');
     const ferrySel = o.find('[data-fn="ferry"]');
@@ -94,6 +95,7 @@ class Cruise {
     o.find('[data-fn="submit"]').click(() => {
       const from = fromDestSel.val();
       const to = toDestSel.val();
+      const fId = ferrySel.val();
       let date = dp.val();
       let time = tp.val();
 
@@ -116,18 +118,43 @@ class Cruise {
       time += ':00';
 
       const data = {
-        from: fromDestSel.val(),
-        to: toDestSel.val(),
-        fId: ferrySel.val(),
+        from,
+        to,
+        fId,
         dt: `${date} ${time}`,
       };
 
-      $.post('/api/routes', data)
+      if (rId) {
+        data.rId = rId;
+        console.log('data ========================>', data);
+
+        return $.ajax({
+          url: `/api/routes/${rId}`,
+          method: 'PUT',
+          data,
+        })
         .done(res => {
-          console.log('redirect...');
+          console.log('res ================>', res);
         });
+      } else {
+        console.log('data ========================>', data);
+        $.post('/api/routes', data)
+          .done(res => {
+            console.log('redirect...');
+          });
+        }
     });
   }
+
+  routesActionHandler() {
+    console.log('on click =============>');
+  }
+
+  routeList(o) {
+    o.find('[data-table-id="routes"]')
+      .click(this.routesActionHandler)
+      .DataTable();
+  } 
 }
 
 module.exports = Cruise;

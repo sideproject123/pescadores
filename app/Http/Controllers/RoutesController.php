@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Routes;
 use Illuminate\Http\Request;
 use Validator;
+use Exception;
+use App\Http\Controllers\UtilController; 
 
 class RoutesController extends Controller
 {
@@ -15,7 +17,7 @@ class RoutesController extends Controller
    */
   public function index()
   {
-    //
+    return $this->getAll();
   }
 
   /**
@@ -28,49 +30,48 @@ class RoutesController extends Controller
     //
   }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
+  public function validation($request)
   {
     $validator = Validator::make($request->all(), [
+      'rId' => 'digits_between:1,10',
       'from' => 'required|digits_between:1,3',
       'to' => 'required|digits_between:1,3',
-      'fId' => 'required|digits_between:1,3',
       'fId' => 'required|digits_between:1,3',
       'dt' => 'required|date_format:"Y-m-d H:i:s"',
     ]);
 
     if ($validator->fails()) {
       $e = $validator->errors()->first();
-      return response($e, 422);
+      throw new Exception($e);
     }
 
     if ($request->from === $request->to) {
-      return response('from and to are the same', 422);
+      throw new Exception('from and to are the same');
+    }
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request, Routes $routes)
+  {
+    try {
+      $this->validation($request);
+    } catch (Exception $e) {
+      return response($e->getMessage(), 422);
     }
 
-    Routes::firstOrCreate([
+    $routes->firstOrCreate([
       'fromDestinationId' => $request->from,
       'toDestinationId' => $request->to,
       'datetime' => $request->dt,
       'ferryId' => $request->fId,
     ]);
 
-    if ($request->withResult) {
-      $all = Routes::all();
-
-      switch ($request->withResult) {
-        case 'data':
-        default:
-          return response()->json($all);
-      }
-    }
-
-    return '';
+    return UtilController::resultResponse($routes);
   }
 
   /**
@@ -104,7 +105,22 @@ class RoutesController extends Controller
    */
   public function update(Request $request, Routes $routes)
   {
-    //
+    try {
+      $this->validation($request);
+
+      $routes
+        ->where('id', $request->rId) 
+        ->update([
+          'fromDestinationId' => $request->from,
+          'toDestinationId' => $request->to,
+          'datetime' => $request->dt,
+          'ferryId' => $request->fId,
+        ]);
+
+      return UtilController::resultResponse($routes, $request->rId);
+    } catch (Exception $e) {
+      return response($e->getMessage(), 422);
+    }
   }
 
   /**
@@ -116,5 +132,27 @@ class RoutesController extends Controller
   public function destroy(Routes $routes)
   {
     //
+  }
+
+  public function getAll()
+  {
+    return Routes::all();
+  }
+
+  public function result()
+  {
+    $resultType = request()->withResult;
+
+    if ($resultType) {
+      $all = $this->getAll();
+
+      switch ($resultType) {
+        case 'data':
+        default:
+          return response()->json($all);
+      }
+    }
+
+    return '';
   }
 }

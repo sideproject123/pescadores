@@ -5,7 +5,7 @@
     <input class="input" type="text" value="" name="name" />
     <button class="submit" data-fn="submit">確認</button>
     <div data-table-wrap="1">
-      @include('cruise.destinations_table')
+      @include('shared.cruise.destinations_table')
     </div>
   </div>
 </div>

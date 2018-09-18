@@ -34215,10 +34215,11 @@ var Cruise = function () {
       });
     }
   }, {
-    key: 'routes',
-    value: function routes(o) {
+    key: 'editRoute',
+    value: function editRoute(o) {
       var dp = o.find('[data-fn="datepicker"]').datepicker();
       var tp = o.find('[data-fn="timepicker"]').timepicker(timepicker);
+      var rId = o.find('[name="rId"]').val();
       var fromDestSel = o.find('[data-fn="fromDest"]');
       var toDestSel = o.find('[data-fn="toDest"]');
       var ferrySel = o.find('[data-fn="ferry"]');
@@ -34230,6 +34231,7 @@ var Cruise = function () {
       o.find('[data-fn="submit"]').click(function () {
         var from = fromDestSel.val();
         var to = toDestSel.val();
+        var fId = ferrySel.val();
         var date = dp.val();
         var time = tp.val();
 
@@ -34252,16 +34254,40 @@ var Cruise = function () {
         time += ':00';
 
         var data = {
-          from: fromDestSel.val(),
-          to: toDestSel.val(),
-          fId: ferrySel.val(),
+          from: from,
+          to: to,
+          fId: fId,
           dt: date + ' ' + time
         };
 
-        $.post('/api/routes', data).done(function (res) {
-          console.log('redirect...');
-        });
+        if (rId) {
+          data.rId = rId;
+          console.log('data ========================>', data);
+
+          return $.ajax({
+            url: '/api/routes/' + rId,
+            method: 'PUT',
+            data: data
+          }).done(function (res) {
+            console.log('res ================>', res);
+          });
+        } else {
+          console.log('data ========================>', data);
+          $.post('/api/routes', data).done(function (res) {
+            console.log('redirect...');
+          });
+        }
       });
+    }
+  }, {
+    key: 'routesActionHandler',
+    value: function routesActionHandler() {
+      console.log('on click =============>');
+    }
+  }, {
+    key: 'routeList',
+    value: function routeList(o) {
+      o.find('[data-table-id="routes"]').click(this.routesActionHandler).DataTable();
     }
   }]);
 

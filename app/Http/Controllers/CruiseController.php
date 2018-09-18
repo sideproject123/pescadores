@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DestinationsController;
+use App\Http\Controllers\RoutesController;
 use App\Destinations;
 use App\Ferries;
 use App\Routes;
+use stdClass;
 
 class CruiseController extends Controller
 {
@@ -48,23 +51,20 @@ class CruiseController extends Controller
   public function editRoute(Request $request)
   {
     $params = $this->params;
-    $dests = Destinations::all();
 
-    foreach ($dests as $item) {
-      $item->value = $item->id;
-      $item->displayName = $item->name;
-    }
+    $dests = Destinations::select('*', 'id as value', 'name as displayName')->get();
 
     $params['destinations'] = $dests;
 
-    $ferries = Ferries::all();
-
-    foreach ($ferries as $item) {
-      $item->value = $item->id;
-      $item->displayName = $item->name;
-    }
+    $ferries = Ferries::select('*', 'id as value', 'name as displayName')->get();
 
     $params['ferries'] = $ferries;
+
+    $rId = $request->rId;
+
+    $route = $rId ? Routes::find($rId) : [];
+
+    $params['route'] = $route;
 
     return view('control_panel_cruise_edit_route', $params);
   }
@@ -84,8 +84,24 @@ class CruiseController extends Controller
   public function routeList(Request $request)
   {
     $params = $this->params;
-    $params['routes'] = Routes::all();
 
-    return view('control_panel_cruise_list_routes', $params);
+    $routes = DB::table('routes') 
+                ->join('destinations as d1', 'routes.fromDestinationId', '=', 'd1.id')
+                ->join('destinations as d2', 'routes.toDestinationId', '=', 'd2.id')
+                ->join('ferries', 'routes.ferryId', '=', 'ferries.id')
+                ->select(
+                  'routes.id',
+                  'routes.status',
+                  'd1.name as fromName',
+                  'd2.name as toName',
+                  'datetime',
+                  'ferries.name as ferryName'
+                )
+                ->orderBy('datetime', 'desc')
+                ->get();
+    $params['routes'] = $route;
+    $params['statusMap'] = Routes::$statusMap;
+
+    return view('control_panel_cruise_route_list', $params);
   }
 }

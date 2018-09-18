@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +9,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['prefix' => 'cruise'], function () {
+  Route::get('editDest', 'CruiseController@editDest');
+  Route::get('editRoute/{rId?}', 'CruiseController@editRoute');
+  Route::get('routeList', 'CruiseController@routeList');
+});
+
 /*
 Route::get('/', function () {
   $all = '{
@@ -33,9 +38,3 @@ Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
   Route::get('/admin', 'Ship');
 });
 */
-
-Route::group(['prefix' => 'cruise'], function () {
-  Route::get('editDest', 'CruiseController@editDest');
-  Route::get('editRoute', 'CruiseController@editRoute');
-  Route::get('routeList', 'CruiseController@routeList');
-});
