@@ -87,6 +87,7 @@ class Cruise {
     const fromDestSel = o.find('[data-fn="fromDest"]');
     const toDestSel = o.find('[data-fn="toDest"]');
     const ferrySel = o.find('[data-fn="ferry"]');
+    const redirectUrl = '/cruise/routeList';
 
     o.find('[data-fn="datepicker-click"]').click(function () {
       dp.datepicker('show');
@@ -126,28 +127,47 @@ class Cruise {
 
       if (rId) {
         data.rId = rId;
-        console.log('data ========================>', data);
 
-        return $.ajax({
+        $.ajax({
           url: `/api/routes/${rId}`,
           method: 'PUT',
           data,
         })
         .done(res => {
-          console.log('res ================>', res);
+          window.location.replace(redirectUrl);
         });
       } else {
-        console.log('data ========================>', data);
         $.post('/api/routes', data)
           .done(res => {
-            console.log('redirect...');
+            window.location.replace(redirectUrl);
           });
         }
     });
+
+    o.find('[data-fn="back"]').click(() => {
+      window.history.back();
+    });
   }
 
-  routesActionHandler() {
-    console.log('on click =============>');
+  routesActionHandler({ target }) {
+    const t = $(target);
+    const id = t.data('id');
+
+    switch (t.data('action')) {
+      case 'delete':
+        $.ajax({
+          url: `/api/routes/${id}`,
+          method: 'DELETE',
+        })
+        .done(res => {
+          console.log('res =================>', res);
+        });
+        break;
+      default:
+        break;
+    } 
+
+    console.log('id =============>', id);
   }
 
   routeList(o) {

@@ -30,15 +30,15 @@ class CruiseController extends Controller
         "id": "Cruise",
         "subFunctions": [
           {
-            "name": "list_routes",
+            "name": "routeList",
             "displayName": "航班總覽"
           },
           {
-            "name": "edit_dest",
+            "name": "editDest",
             "displayName": "航點設定"
           },
           {
-            "name": "edit_route",
+            "name": "editRoute",
             "displayName": "航線設定"
           }
         ]
@@ -97,9 +97,9 @@ class CruiseController extends Controller
                   'datetime',
                   'ferries.name as ferryName'
                 )
-                ->orderBy('datetime', 'desc')
+                ->orderBy('updated_at', 'desc')
                 ->get();
-    $params['routes'] = $route;
+    $params['routes'] = $routes;
     $params['statusMap'] = Routes::$statusMap;
 
     return view('control_panel_cruise_route_list', $params);

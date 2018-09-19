@@ -34223,6 +34223,7 @@ var Cruise = function () {
       var fromDestSel = o.find('[data-fn="fromDest"]');
       var toDestSel = o.find('[data-fn="toDest"]');
       var ferrySel = o.find('[data-fn="ferry"]');
+      var redirectUrl = '/cruise/routeList';
 
       o.find('[data-fn="datepicker-click"]').click(function () {
         dp.datepicker('show');
@@ -34262,27 +34263,47 @@ var Cruise = function () {
 
         if (rId) {
           data.rId = rId;
-          console.log('data ========================>', data);
 
-          return $.ajax({
+          $.ajax({
             url: '/api/routes/' + rId,
             method: 'PUT',
             data: data
           }).done(function (res) {
-            console.log('res ================>', res);
+            window.location.replace(redirectUrl);
           });
         } else {
-          console.log('data ========================>', data);
           $.post('/api/routes', data).done(function (res) {
-            console.log('redirect...');
+            window.location.replace(redirectUrl);
           });
         }
+      });
+
+      o.find('[data-fn="back"]').click(function () {
+        window.history.back();
       });
     }
   }, {
     key: 'routesActionHandler',
-    value: function routesActionHandler() {
-      console.log('on click =============>');
+    value: function routesActionHandler(_ref3) {
+      var target = _ref3.target;
+
+      var t = $(target);
+      var id = t.data('id');
+
+      switch (t.data('action')) {
+        case 'delete':
+          $.ajax({
+            url: '/api/routes/' + id,
+            method: 'DELETE'
+          }).done(function (res) {
+            console.log('res =================>', res);
+          });
+          break;
+        default:
+          break;
+      }
+
+      console.log('id =============>', id);
     }
   }, {
     key: 'routeList',

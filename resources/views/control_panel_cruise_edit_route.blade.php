@@ -26,6 +26,7 @@
   </div>
   <div class="submit">
     <button type="button" class="btn" data-fn="submit">確定</button>
+    <button type="button" class="btn" data-fn="back">取消</button>
   </div>
 </div>
 @endsection

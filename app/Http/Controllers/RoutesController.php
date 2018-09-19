@@ -64,14 +64,14 @@ class RoutesController extends Controller
       return response($e->getMessage(), 422);
     }
 
-    $routes->firstOrCreate([
+    $r = $routes->firstOrCreate([
       'fromDestinationId' => $request->from,
       'toDestinationId' => $request->to,
       'datetime' => $request->dt,
       'ferryId' => $request->fId,
     ]);
 
-    return UtilController::resultResponse($routes);
+    return UtilController::resultResponse($r);
   }
 
   /**
@@ -108,16 +108,15 @@ class RoutesController extends Controller
     try {
       $this->validation($request);
 
-      $routes
-        ->where('id', $request->rId) 
-        ->update([
-          'fromDestinationId' => $request->from,
-          'toDestinationId' => $request->to,
-          'datetime' => $request->dt,
-          'ferryId' => $request->fId,
-        ]);
+      $r = $routes->findOrFail($request->rId);
+      $r->update([
+        'fromDestinationId' => $request->from,
+        'toDestinationId' => $request->to,
+        'datetime' => $request->dt,
+        'ferryId' => $request->fId,
+      ]);
 
-      return UtilController::resultResponse($routes, $request->rId);
+      return UtilController::resultResponse($r);
     } catch (Exception $e) {
       return response($e->getMessage(), 422);
     }
@@ -129,9 +128,13 @@ class RoutesController extends Controller
    * @param  \App\Routes  $routes
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Routes $routes)
+  public function destroy($id, Routes $routes)
   {
-    //
+    try {
+      return $routes->destroy($id);
+    } catch (Exception $e) {
+      return response('', 422);
+    }
   }
 
   public function getAll()

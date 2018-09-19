@@ -22,7 +22,7 @@
       <td>{{ $d->ferryName }}</td>
       <td>left</td>
       <td>
-        <a href="/editRoute/{{ $d->id }}">修改</a> 
+        <a href="/cruise/editRoute/{{ $d->id }}">修改</a> 
         <button type="text" data-action="delete" data-id="{{ $d->id }}">刪除</button>
         <button type="text" data-action="cancel" data-id="{{ $d->id }}">停售</button>
         <button type="text" data-action="reserve" data-id="{{ $d->id }}">劃位</button>
