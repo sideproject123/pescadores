@@ -15,7 +15,7 @@
         <ul class="sub-functions">
         @foreach ($function['subFunctions'] as $fn)
           <li>
-            <a href="{{ $fn['name'] }}" target="_self">{{ $fn['displayName'] }}</a>
+            <a href="{{ $fn['url'] }}" target="_self">{{ $fn['displayName'] }}</a>
           </li>   
         @endforeach
         </ul>

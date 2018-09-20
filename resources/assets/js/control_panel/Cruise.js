@@ -160,8 +160,19 @@ class Cruise {
           method: 'DELETE',
         })
         .done(res => {
-          console.log('res =================>', res);
+          console.log('delete res ==============>', res); 
         });
+        break;
+      case 'updateStatus':
+        var data = {
+          id,
+          status: t.data('status'),
+        };
+
+        $.post(`/api/routes/updateStatus`, data)
+          .done(res => {
+            console.log('res ==============>', res);
+          });
         break;
       default:
         break;

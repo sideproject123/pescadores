@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('destinations', 'DestinationsController');
 Route::resource('routes', 'RoutesController');
+Route::post('routes/updateStatus', 'RoutesController@updateStatus');

@@ -131,9 +131,47 @@ class RoutesController extends Controller
   public function destroy($id, Routes $routes)
   {
     try {
+      // check if any ticket sold throw error
+
       return $routes->destroy($id);
+
+      // clear seats
     } catch (Exception $e) {
       return response('', 422);
+    }
+  }
+
+  public function updateStatus(Request $request, Routes $routes)
+  {
+    try {
+      $validator = Validator::make($request->all(), [
+        'id' => 'required|digits_between:1,10',
+        'status' => 'required|in:pending,active,cancelled,completed',
+      ]);
+
+      if ($validator->fails()) {
+        $e = $validator->errors()->first();
+        throw new Exception($e);
+      }
+
+      $r = $routes->findOrFail($request->id);
+      $r->update([
+        'status' => $request->status,
+      ]);
+
+      switch ($request->status) {
+        case 'cancelled':
+          // cancel ticket
+          // refund if credit card
+          // clear seats
+          break;
+        default:
+          break;
+      }
+
+
+    } catch (Exception $e) {
+      return response($e->getMessage(), 422);
     }
   }
 

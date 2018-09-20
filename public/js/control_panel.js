@@ -34296,7 +34296,17 @@ var Cruise = function () {
             url: '/api/routes/' + id,
             method: 'DELETE'
           }).done(function (res) {
-            console.log('res =================>', res);
+            console.log('delete res ==============>', res);
+          });
+          break;
+        case 'updateStatus':
+          var data = {
+            id: id,
+            status: t.data('status')
+          };
+
+          $.post('/api/routes/updateStatus', data).done(function (res) {
+            console.log('res ==============>', res);
           });
           break;
         default:

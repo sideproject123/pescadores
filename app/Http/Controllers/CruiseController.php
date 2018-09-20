@@ -30,14 +30,17 @@ class CruiseController extends Controller
         "id": "Cruise",
         "subFunctions": [
           {
+            "url": "/cruise/routeList",
             "name": "routeList",
             "displayName": "航班總覽"
           },
           {
+            "url": "/cruise/editDest",
             "name": "editDest",
             "displayName": "航點設定"
           },
           {
+            "url": "/cruise/editRoute",
             "name": "editRoute",
             "displayName": "航線設定"
           }
