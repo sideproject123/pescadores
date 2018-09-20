@@ -34134,6 +34134,8 @@ var _require = __webpack_require__(10),
 var Cruise = function () {
   function Cruise() {
     _classCallCheck(this, Cruise);
+
+    this.routesVars = {};
   }
 
   _createClass(Cruise, [{
@@ -34283,42 +34285,90 @@ var Cruise = function () {
       });
     }
   }, {
+    key: 'routesTableUpdateStatus',
+    value: function routesTableUpdateStatus(target, status) {
+      var _routesVars = this.routesVars,
+          statusMap = _routesVars.statusMap,
+          table = _routesVars.table;
+
+      var tr = target.closest('tr');
+      var rowIndex = tr.data('rowIndex');
+      var currentStatusName = tr.find('[data-cell-key="status"]').html();
+      var data = table.row(rowIndex).data();
+
+      switch (status) {
+        case 'active':
+          tr.removeClass('pending').addClass('active');
+          break;
+        case 'cancelled':
+          tr.removeClass('active').addClass('cancelled');
+          break;
+      }
+
+      data[data.indexOf(currentStatusName)] = statusMap[status];
+      table.row(rowIndex).data(data).draw();
+    }
+  }, {
     key: 'routesActionHandler',
     value: function routesActionHandler(_ref3) {
+      var _this2 = this;
+
       var target = _ref3.target;
 
       var t = $(target);
       var id = t.data('id');
 
       switch (t.data('action')) {
+        case 'activate':
+          if (!window.confirm('確定要開啟此航班')) {
+            return;
+          }
+
+          $.post('/api/routes/updateStatus', {
+            id: id,
+            status: 'active'
+          }).done(function () {
+            return _this2.routesTableUpdateStatus(t, 'active');
+          });
+          break;
+        case 'cancel':
+          if (!window.confirm('確定要停售此航班')) {
+            return;
+          }
+
+          // loading icon
+          // get if ticket sold
+          // if has ticket confirm('refund')
+          $.post('/api/routes/updateStatus', {
+            id: id,
+            status: 'cancelled'
+          }).done(function () {
+            return _this2.routesTableUpdateStatus(t, 'cancelled');
+          });
+          break;
         case 'delete':
           $.ajax({
             url: '/api/routes/' + id,
             method: 'DELETE'
-          }).done(function (res) {
-            console.log('delete res ==============>', res);
-          });
-          break;
-        case 'updateStatus':
-          var data = {
-            id: id,
-            status: t.data('status')
-          };
+          }).done(function () {
+            var table = _this2.routesVars.table;
 
-          $.post('/api/routes/updateStatus', data).done(function (res) {
-            console.log('res ==============>', res);
+
+            table.row(rowIndex).remove().draw();
           });
           break;
         default:
           break;
       }
-
-      console.log('id =============>', id);
     }
   }, {
     key: 'routeList',
     value: function routeList(o) {
-      o.find('[data-table-id="routes"]').click(this.routesActionHandler).DataTable();
+      var routesVars = this.routesVars;
+
+      var table = o.find('[data-table-id="routes"]');
+      routesVars.statusMap = table.data('statusMap');
+      routesVars.table = table.click(this.routesActionHandler).DataTable();
     }
   }]);
 

@@ -5,7 +5,9 @@ require('jquery-timepicker/jquery.timepicker');
 const { timepicker } = require('../global');
 
 class Cruise {
-  constructor() {}
+  constructor() {
+    this.routesVars = {};
+  }
 
   changeDestinationsStatus({ t, id, value }) {
     return $.ajax({
@@ -149,42 +151,82 @@ class Cruise {
     });
   }
 
+  routesTableUpdateStatus(target, status) {
+    const { routesVars: {
+      statusMap,
+      table,
+    }} = this;
+    const tr = target.closest('tr');
+    const rowIndex = tr.data('rowIndex');
+    const currentStatusName = tr.find('[data-cell-key="status"]').html();
+    const data = table.row(rowIndex).data();
+
+    switch (status) {
+      case 'active':
+        tr.removeClass('pending').addClass('active');
+        break;
+      case 'cancelled':
+        tr.removeClass('active').addClass('cancelled');
+        break;
+    }
+
+    data[data.indexOf(currentStatusName)] = statusMap[status];
+    table.row(rowIndex).data(data).draw();
+  }
+
   routesActionHandler({ target }) {
     const t = $(target);
     const id = t.data('id');
 
     switch (t.data('action')) {
+      case 'activate':
+        if (!window.confirm('確定要開啟此航班')) {
+          return;
+        }
+
+        $.post(`/api/routes/updateStatus`, {
+          id,
+          status: 'active',
+        })
+        .done(() => this.routesTableUpdateStatus(t, 'active'));
+        break;
+      case 'cancel':
+        if (!window.confirm('確定要停售此航班')) {
+          return;
+        }
+
+        // loading icon
+        // get if ticket sold
+        // if has ticket confirm('refund')
+        $.post(`/api/routes/updateStatus`, {
+          id,
+          status: 'cancelled',
+        })
+        .done(() => this.routesTableUpdateStatus(t, 'cancelled'));
+        break;
       case 'delete':
         $.ajax({
           url: `/api/routes/${id}`,
           method: 'DELETE',
         })
-        .done(res => {
-          console.log('delete res ==============>', res); 
-        });
-        break;
-      case 'updateStatus':
-        var data = {
-          id,
-          status: t.data('status'),
-        };
+        .done(() => {
+          const { routesVars: {
+            table,
+          }} = this;
 
-        $.post(`/api/routes/updateStatus`, data)
-          .done(res => {
-            console.log('res ==============>', res);
-          });
+          table.row(rowIndex).remove().draw();
+        });
         break;
       default:
         break;
     } 
-
-    console.log('id =============>', id);
   }
 
   routeList(o) {
-    o.find('[data-table-id="routes"]')
-      .click(this.routesActionHandler)
-      .DataTable();
+    const { routesVars } = this;
+    const table = o.find('[data-table-id="routes"]');
+    routesVars.statusMap = table.data('statusMap');
+    routesVars.table = table.click(this.routesActionHandler).DataTable();
   } 
 }
 
