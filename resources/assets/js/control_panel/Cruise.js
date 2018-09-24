@@ -3,6 +3,7 @@ require('datatables.net');
 require('jquery-ui/ui/widgets/datepicker');
 require('jquery-timepicker/jquery.timepicker');
 const { timepicker } = require('../global');
+const { SeatLayout } = require('../utils');
 
 class Cruise {
   constructor() {
@@ -217,6 +218,10 @@ class Cruise {
           table.row(rowIndex).remove().draw();
         });
         break;
+      case 'reserve':
+        const { routesVars: { SeatLayout } } = this;
+        console.log(SeatLayout);
+        break;
       default:
         break;
     } 
@@ -227,6 +232,10 @@ class Cruise {
     const table = o.find('[data-table-id="routes"]');
     routesVars.statusMap = table.data('statusMap');
     routesVars.table = table.click(this.routesActionHandler).DataTable();
+    routesVars.SeatLayout = new SeatLayout({
+      action: 'reserve',
+      o: this.o.find('[data-fn="seatLayout"]'),
+    });
   } 
 }
 

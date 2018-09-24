@@ -13347,7 +13347,7 @@ var doms = {
 };
 
 $(function () {
-  __webpack_require__(47);
+  __webpack_require__(48);
 
   var _require = __webpack_require__(10),
       datatables = _require.datatables;
@@ -34131,6 +34131,9 @@ __webpack_require__(46);
 var _require = __webpack_require__(10),
     timepicker = _require.timepicker;
 
+var _require2 = __webpack_require__(47),
+    SeatLayout = _require2.SeatLayout;
+
 var Cruise = function () {
   function Cruise() {
     _classCallCheck(this, Cruise);
@@ -34357,6 +34360,11 @@ var Cruise = function () {
             table.row(rowIndex).remove().draw();
           });
           break;
+        case 'reserve':
+          var _SeatLayout = this.routesVars.SeatLayout;
+
+          console.log(_SeatLayout);
+          break;
         default:
           break;
       }
@@ -34369,6 +34377,10 @@ var Cruise = function () {
       var table = o.find('[data-table-id="routes"]');
       routesVars.statusMap = table.data('statusMap');
       routesVars.table = table.click(this.routesActionHandler).DataTable();
+      routesVars.SeatLayout = new SeatLayout({
+        action: 'reserve',
+        o: this.o.find('[data-fn="seatLayout"]')
+      });
     }
   }]);
 
@@ -50600,6 +50612,224 @@ if (typeof jQuery !== 'undefined') {
 
 /***/ }),
 /* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var exports = module.exports = {};
+
+exports.SeatLayout = function () {
+  function SeatLayout(props) {
+    _classCallCheck(this, SeatLayout);
+
+    var action = props.action,
+        o = props.o;
+
+
+    var obj = o;
+
+    if (!(obj instanceof jQuery)) {
+      obj = $(obj);
+    }
+
+    if (!action) {
+      console.log('no action');
+    }
+
+    var seats = {
+      reserved: {},
+      sold: {},
+      na: {},
+      selected: {}
+    };
+
+    obj.find('[data-type="cell"]').each(function (i, item) {
+      var cell = $(item);
+      var status = cell.data('status');
+
+      if (seats[status]) {
+        var row = cell.data('row');
+        var col = cell.data('col');
+
+        seats[status]['' + row + col] = true;
+      }
+    });
+
+    this.o = obj;
+    this.seats = seats;
+    this.action = action;
+    this.init();
+  }
+
+  _createClass(SeatLayout, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      var fn = this[this.action + 'Action'];
+      var cb = void 0;
+
+      if (typeof fn === 'function') {
+        cb = fn.call(this);
+      }
+
+      this.o.on('click', function (_ref) {
+        var target = _ref.target;
+
+        var o = $(target);
+        var type = o.data('type');
+
+        if (type !== 'cell') {
+          return;
+        }
+
+        _this.cell = o;
+        _this.toggleCell();
+
+        if (typeof cb !== 'function') {
+          return;
+        }
+
+        cb();
+      });
+    }
+  }, {
+    key: 'toggleCell',
+    value: function toggleCell() {
+      var cell = this.cell,
+          selected = this.seats.selected;
+
+
+      cell.toggleClass('selected');
+      var isSelected = cell.hasClass('selected');
+      var row = cell.data('row');
+      var col = cell.data('col');
+      var pos = '' + row + col;
+
+      if (isSelected) {
+        selected[pos] = true;
+      } else {
+        delete selected[pos];
+      }
+
+      cell.row = row;
+      cell.col = col;
+      cell.pos = pos;
+      cell.isSelected = isSelected;
+    }
+  }, {
+    key: 'getNextCell',
+    value: function getNextCell() {
+      if (!(this.cell instanceof jQuery)) {
+        return;
+      }
+
+      var next = this.cell.next('[data-type="cell"]');
+
+      if (next.length === 0) {
+        next = this.cell.closest('[data-type="row"]').next('[data-type="row"]').find('[data-type="cell"]:first-child');
+      }
+
+      return next.length === 0 ? null : next;
+    }
+  }, {
+    key: 'moveToNextCell',
+    value: function moveToNextCell() {
+      this.cell = this.getNextCell();
+      return this.cell;
+    }
+  }, {
+    key: 'reserveAction',
+    value: function reserveAction() {
+      var _this2 = this;
+
+      var o = this.o,
+          seats = this.seats;
+
+      var auto = o.find('[data-autoFill]');
+      var autoNum = o.find('[data-autoFillNum]');
+
+      o.find('[data-options="reserve"]').addClass('show');
+      o.find('[data-action="submit"]').on('click', function (_ref2) {
+        var target = _ref2.target;
+
+        var a = Object.keys(seats.selected).map(function (key) {
+          return key;
+        }).sort();
+        var val = $(target).val();
+
+        if (!a.length) {
+          return;
+        }
+
+        console.log('val =============>', val);
+      });
+      o.find('[data-action="reset"]').on('click', function () {
+        o.find('.seat-layout-cell.selected').removeClass('selected');
+        seats.selected = [];
+      });
+      o.find('[data-action="selectAllReserved"]').on('click', function () {
+        o.find('.seat-layout-cell.reserved').each(function (i, el) {
+          var o = $(el);
+
+          if (!o.hasClass('selected')) {
+            _this2.cell = o;
+            _this2.toggleCell();
+          }
+        });
+      });
+
+      var cb = function cb() {
+        var isAuto = auto.is(":checked");
+
+        if (isAuto) {
+          var n = parseInt(autoNum.val(), 10);
+
+          if (isNaN(n)) {
+            _this2.toggleCell();
+            return alert('請填入座位數量');
+          }
+
+          if (!_this2.cell.hasClass('selected')) {
+            _this2.toggleCell();
+          }
+
+          n -= 1;
+
+          while (n) {
+            var cell = _this2.moveToNextCell();
+
+            if (!cell) {
+              break;
+            }
+
+            var status = cell.data('status');
+            var isSelected = cell.hasClass('selected');
+
+            if (isSelected) {
+              n -= 1;
+            } else if (status === 'av' || status === 'reserved') {
+              _this2.toggleCell();
+              n -= 1;
+            }
+          }
+        }
+      };
+
+      return cb;
+    }
+  }]);
+
+  return SeatLayout;
+}();
+
+/***/ }),
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* Chinese initialisation for the jQuery UI date picker plugin. */

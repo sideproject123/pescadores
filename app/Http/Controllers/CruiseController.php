@@ -105,6 +105,15 @@ class CruiseController extends Controller
     $params['routes'] = $routes;
     $params['statusMap'] = Routes::$statusMap;
 
+    $params['seats'] = [
+      '1A' => 'reserved',
+      '1B' => 'na',
+      '1C' => 'sold',
+      '4H' => 'na',
+      '4I' => 'sold',
+      '4J' => 'reserved',
+    ];
+
     return view('control_panel_cruise_route_list', $params);
   }
 }

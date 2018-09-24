@@ -63,3 +63,85 @@ body {
   border: 1px solid #00f;
   width: 75%;
 }
+
+.seat-layout {
+  $reserved: #98a4a7;
+  $sold: #f8386e;
+  $selected: #86f5c0;
+  $available: #fff;
+
+  %seat {
+    width: 26px;
+    height: 20px;
+    border: 1px solid;
+    border-radius: 6px;
+  }
+
+  border: 1px solid #f00; 
+
+  .na {
+    visibility: hidden;
+  }
+
+  &-illustration {
+    .reserved,
+    .sold,
+    .av,
+    .selected
+    {
+      @extend %seat;
+      display: inline-block;
+    }
+
+    .av {
+      background-color: $available;
+    }
+
+    .reserved {
+      background-color: $reserved;
+    }
+
+    .sold {
+      background-color: $sold;
+    }
+
+    .selected {
+      background-color: $selected;
+    }
+  }
+
+  &-row {
+    display: inline-block;
+  } 
+
+  &-cell {
+    @extend %seat;
+    list-style: none;
+    list-style-type: none;
+    float: left;
+    cursor: pointer;
+    user-select: none;
+
+    &.sold,
+    &.na
+    {
+      pointer-events: none;
+    }
+
+    &.av {
+      background-color: $available;
+    }
+
+    &.reserved {
+      background-color: $reserved;
+    }
+
+    &.sold {
+      background-color: $sold;
+    }
+
+    &.selected {
+      background-color: $selected;
+    }
+  }
+}
