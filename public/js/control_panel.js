@@ -50754,8 +50754,8 @@ exports.SeatLayout = function () {
       var auto = o.find('[data-autoFill]');
       var autoNum = o.find('[data-autoFillNum]');
 
-      o.find('[data-options="reserve"]').addClass('show');
-      o.find('[data-action="submit"]').on('click', function (_ref2) {
+      o.find('.seat-layout-options').addClass('reserve');
+      o.find('').on('click', function (_ref2) {
         var target = _ref2.target;
 
         var a = Object.keys(seats.selected).map(function (key) {

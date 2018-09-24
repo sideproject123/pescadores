@@ -125,8 +125,8 @@ exports.SeatLayout = class SeatLayout {
     const auto = o.find('[data-autoFill]');
     const autoNum = o.find('[data-autoFillNum]')
 
-    o.find('[data-options="reserve"]').addClass('show');
-    o.find('[data-action="submit"]')
+    o.find('.seat-layout-options').addClass('reserve');
+    o.find('')
     .on('click', ({ target }) => {
       const a = Object.keys(seats.selected).map(key => key).sort();
       const val = $(target).val();

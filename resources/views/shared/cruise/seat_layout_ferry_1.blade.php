@@ -17,8 +17,8 @@
       <span class="selected"></span>
     </li>
   </ul>
-  <div>
-    <div class="reserve-options-block">
+  <div class="seat-layout-options">
+    <div class="option-reserve">
       <label><input type="checkbox" name="autoFill" data-autoFill="1"><span>自動補位</span></label>
       <span>座位數量</span><input type="text" name="autoFillNum" value="" data-autoFillNum="1">
       <button type="button" data-action="selectAllReserved">選擇全部已保留座位</button>

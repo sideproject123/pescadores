@@ -110,6 +110,18 @@ body {
     }
   }
 
+  &-options {
+    [class^="option-"] {
+      display: none;
+    }
+
+    &.reserve {
+      .option-reserve {
+        display: block;
+      }
+    }
+  }
+
   &-row {
     display: inline-block;
   } 
