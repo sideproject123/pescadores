@@ -52,8 +52,13 @@ exports.SeatLayout = class SeatLayout {
     }
 
     this.o.on('click', ({ target }) => {
-      const o = $(target);
-      const type = o.data('type');
+      let o = $(target);
+      let type = o.data('type');
+
+      if (type === 'text') {
+        o = o.parent();
+        type = o.data('type');
+      }
 
       if (type !== 'cell') {
         return;
@@ -126,22 +131,6 @@ exports.SeatLayout = class SeatLayout {
     const autoNum = o.find('[data-autoFillNum]')
 
     o.find('.seat-layout-options').addClass('reserve');
-    o.find('')
-    .on('click', ({ target }) => {
-      const a = Object.keys(seats.selected).map(key => key).sort();
-      const val = $(target).val();
-
-      if (!a.length) {
-        return;
-      }
-
-      console.log('val =============>', val);
-    });
-    o.find('[data-action="reset"]')
-    .on('click', () => {
-      o.find('.seat-layout-cell.selected').removeClass('selected');
-      seats.selected = [];
-    });
     o.find('[data-action="selectAllReserved"]')
     .on('click', () => {
       o.find('.seat-layout-cell.reserved').each((i, el) => {
@@ -152,6 +141,24 @@ exports.SeatLayout = class SeatLayout {
           this.toggleCell();
         }
       });
+    });
+    o.find('[data-action="reset"]')
+    .on('click', () => {
+      o.find('.seat-layout-cell.selected').removeClass('selected');
+      seats.selected = [];
+    });
+    o.find('[data-action="submit"]')
+    .on('click', ({ target }) => {
+      const a = Object.keys(seats.selected).map(key => key).sort();
+      const val = $(target).val();
+
+      console.log('val =============>', val);
+      console.log('a =============>', a);
+      
+      if (!a.length) {
+        return;
+      }
+
     });
 
     const cb = () => {

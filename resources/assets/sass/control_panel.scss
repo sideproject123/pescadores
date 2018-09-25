@@ -69,12 +69,14 @@ body {
   $sold: #f8386e;
   $selected: #86f5c0;
   $available: #fff;
+  $business: #ff0;
 
   %seat {
     width: 26px;
     height: 20px;
     border: 1px solid;
     border-radius: 6px;
+    position: relative;
   }
 
   border: 1px solid #f00; 
@@ -83,11 +85,34 @@ body {
     visibility: hidden;
   }
 
+  .forbidden {
+    &::before, &::after {
+      content: "";
+      border: 1px solid #f00;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      transform: translateY(-50%);
+    } 
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+
   &-illustration {
     .reserved,
     .sold,
     .av,
-    .selected
+    .selected,
+    .forbidden,
+    .class-B
     {
       @extend %seat;
       display: inline-block;
@@ -107,6 +132,10 @@ body {
 
     .selected {
       background-color: $selected;
+    }
+
+    .class-B {
+      background-color: $business;
     }
   }
 
@@ -133,15 +162,21 @@ body {
     float: left;
     cursor: pointer;
     user-select: none;
+    text-align: center;
 
     &.sold,
-    &.na
+    &.na,
+    &.forbidden
     {
       pointer-events: none;
     }
 
     &.av {
       background-color: $available;
+    }
+
+    &.class-B {
+      background-color: $business;
     }
 
     &.reserved {
@@ -155,5 +190,6 @@ body {
     &.selected {
       background-color: $selected;
     }
+
   }
 }

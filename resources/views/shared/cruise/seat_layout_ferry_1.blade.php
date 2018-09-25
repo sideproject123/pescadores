@@ -1,4 +1,4 @@
-<div class="seat-layout" data-fn="seatLayout">
+<div class="seat-layout ferry-1" data-fn="seatLayout">
   <ul class="seat-layout-illustration">
     <li class="item">
       <span class="">已保留座位</span>
@@ -16,6 +16,14 @@
       <span class="">已選擇座位</span>
       <span class="selected"></span>
     </li>
+    <li class="item">
+      <span class="">禁止座位</span>
+      <span class="forbidden"></span>
+    </li>
+    <li class="item">
+      <span class="">商務艙座位</span>
+      <span class="class-B"></span>
+    </li>
   </ul>
   <div class="seat-layout-options">
     <div class="option-reserve">
@@ -29,18 +37,19 @@
     <ul class="seat-layout-row" data-type="row">
     @for ($x = 65, $y = 81; $x < $y; $x++)
     @php
-      $c = chr($x);
-      $__no = $i.$c;
-      $__status = isset($seats[$__no]) ? $seats[$__no] : 'av';
+      $__c = chr($x);
+      $__no = $i.$__c;
+      $__status = isset($seatStatus[$__no]) ? $seatStatus[$__no] : 'av';
+      $__class = isset($seatClass[$__no]) ? $seatClass[$__no] : 'E';
     @endphp
       <li
-        class="seat-layout-cell {{ $__status }}"
+        class="seat-layout-cell {{ $__status }} class-{{ $__class }}"
         data-type="cell"
         data-status="{{ $__status }}"
         data-row="{{ $i }}"
-        data-col="{{ $c }}"
+        data-col="{{ $__c }}"
       >
-        {{ $__no }}
+        <span class="text" data-type="text">{{ $__no }}</span>
       </li>    
     @endfor
     </ul>

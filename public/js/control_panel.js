@@ -50684,6 +50684,11 @@ exports.SeatLayout = function () {
         var o = $(target);
         var type = o.data('type');
 
+        if (type === 'text') {
+          o = o.parent();
+          type = o.data('type');
+        }
+
         if (type !== 'cell') {
           return;
         }
@@ -50755,24 +50760,6 @@ exports.SeatLayout = function () {
       var autoNum = o.find('[data-autoFillNum]');
 
       o.find('.seat-layout-options').addClass('reserve');
-      o.find('').on('click', function (_ref2) {
-        var target = _ref2.target;
-
-        var a = Object.keys(seats.selected).map(function (key) {
-          return key;
-        }).sort();
-        var val = $(target).val();
-
-        if (!a.length) {
-          return;
-        }
-
-        console.log('val =============>', val);
-      });
-      o.find('[data-action="reset"]').on('click', function () {
-        o.find('.seat-layout-cell.selected').removeClass('selected');
-        seats.selected = [];
-      });
       o.find('[data-action="selectAllReserved"]').on('click', function () {
         o.find('.seat-layout-cell.reserved').each(function (i, el) {
           var o = $(el);
@@ -50782,6 +50769,25 @@ exports.SeatLayout = function () {
             _this2.toggleCell();
           }
         });
+      });
+      o.find('[data-action="reset"]').on('click', function () {
+        o.find('.seat-layout-cell.selected').removeClass('selected');
+        seats.selected = [];
+      });
+      o.find('[data-action="submit"]').on('click', function (_ref2) {
+        var target = _ref2.target;
+
+        var a = Object.keys(seats.selected).map(function (key) {
+          return key;
+        }).sort();
+        var val = $(target).val();
+
+        console.log('val =============>', val);
+        console.log('a =============>', a);
+
+        if (!a.length) {
+          return;
+        }
       });
 
       var cb = function cb() {
