@@ -10,7 +10,7 @@
     </li>
     <li class="item">
       <span class="">可使用座位</span>
-      <span class="av"></span>
+      <span class="vacant"></span>
     </li>
     <li class="item">
       <span class="">已選擇座位</span>
@@ -39,7 +39,7 @@
     @php
       $__c = chr($x);
       $__no = $i.$__c;
-      $__status = isset($seatStatus[$__no]) ? $seatStatus[$__no] : 'av';
+      $__status = isset($seatStatus[$__no]) ? $seatStatus[$__no] : 'vacant';
       $__class = isset($seatClass[$__no]) ? $seatClass[$__no] : 'E';
     @endphp
       <li

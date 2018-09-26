@@ -9559,8 +9559,8 @@ body {
 .seat-layout-illustration .seat-layout .reserved,
 .seat-layout .seat-layout-illustration .sold,
 .seat-layout-illustration .seat-layout .sold,
-.seat-layout .seat-layout-illustration .av,
-.seat-layout-illustration .seat-layout .av,
+.seat-layout .seat-layout-illustration .vacant,
+.seat-layout-illustration .seat-layout .vacant,
 .seat-layout .seat-layout-illustration .selected,
 .seat-layout-illustration .seat-layout .selected,
 .seat-layout .seat-layout-illustration .forbidden,
@@ -9604,14 +9604,14 @@ body {
 
 .seat-layout-illustration .reserved,
 .seat-layout-illustration .sold,
-.seat-layout-illustration .av,
+.seat-layout-illustration .vacant,
 .seat-layout-illustration .selected,
 .seat-layout-illustration .forbidden,
 .seat-layout-illustration .class-B {
   display: inline-block;
 }
 
-.seat-layout-illustration .av {
+.seat-layout-illustration .vacant {
   background-color: #fff;
 }
 
@@ -9661,7 +9661,7 @@ body {
   pointer-events: none;
 }
 
-.seat-layout-cell.av {
+.seat-layout-cell.vacant {
   background-color: #fff;
 }
 
