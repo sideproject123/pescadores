@@ -50639,6 +50639,7 @@ exports.SeatLayout = function () {
 
     if (!action) {
       console.log('no action');
+      return;
     }
 
     var seats = {

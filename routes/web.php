@@ -15,7 +15,7 @@ Route::group(['prefix' => 'cruise'], function () {
   Route::get('routeList', 'CruiseController@routeList');
 });
 
-Route::get('createSeat', 'FerriesController@createSeatsByRouteId');
+Route::get('createSeat', 'FerriesController@insertSeatsWithRouteId');
 /*
 Route::get('/', function () {
   $all = '{

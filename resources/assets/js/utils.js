@@ -16,6 +16,7 @@ exports.SeatLayout = class SeatLayout {
 
     if (!action) {
       console.log('no action');
+      return;
     }
 
     const seats = {
@@ -200,4 +201,6 @@ exports.SeatLayout = class SeatLayout {
 
     return cb;
   }
+
+
 }
