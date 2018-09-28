@@ -126,4 +126,20 @@ class DestinationsController extends Controller
   {
     return Destinations::all();
   }
+
+  public function editDest(Request $request)
+  {
+    var_dump($request->all());
+    
+    /*
+    $params = $this->params;
+    $params['data'] = Destinations::all();
+    $params['cols'] = array(
+      array('title' => '名稱', 'field' => 'name'),
+      array('title' => '', 'field' => 'status')
+    );
+
+    return view('control_panel_cruise_edit_dest', $params);
+    */
+  }
 }

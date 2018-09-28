@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use App\Http\Controllers\DestinationsController;
-use App\Http\Controllers\RoutesController;
+use stdClass;
+use Validator;
 use App\Destinations;
 use App\Ferries;
 use App\Routes;
-use stdClass;
+use App\Http\Controllers\DestinationsController;
+use App\Http\Controllers\RoutesController;
+use App\Http\Controllers\SeatsController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CruiseController extends Controller
 {
@@ -105,6 +107,8 @@ class CruiseController extends Controller
     $params['routes'] = $routes;
     $params['statusMap'] = Routes::$statusMap;
 
+    /*
+    $seats = Seats::where('route_id', 1);
     $params['seatStatus'] = [
       '1A' => 'reserved',
       '1B' => 'na',
@@ -124,5 +128,24 @@ class CruiseController extends Controller
     ];
 
     return view('control_panel_cruise_route_list', $params);
+    */
+  }
+
+  public function showSeatLayout(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+      'rId' => 'required|digits_between:1,10',
+      'fId' => 'required|digits_between:1,3',
+    ]);
+
+    if ($validator->fails()) {
+      return response($validator->errors->first(), 422);
+    }
+
+    $fields = [
+      ['route_id', $request->rId],
+    ];
+
+    var_dump(SeatsController::getSeatsByFields($fields));
   }
 }

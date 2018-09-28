@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Routes;
-use Illuminate\Http\Request;
-use Validator;
 use Exception;
+use Validator;
+use App\Ferries;
+use App\Routes;
+use App\Seats;
+use App\Http\Controllers\FerriesController; 
 use App\Http\Controllers\UtilController; 
+use Illuminate\Http\Request;
 
 class RoutesController extends Controller
 {
@@ -70,6 +73,25 @@ class RoutesController extends Controller
       'datetime' => $request->dt,
       'ferryId' => $request->fId,
     ]);
+
+    $info = FerriesController::parseSeatInfo($request->fId);
+    $seats = [];
+
+    foreach ($info['seats'] as $pos => $desc) {
+      $item = [
+        'route_id' => $r->id,
+        'position' => $pos,
+        'area' => $desc['area'],
+        'class' => $desc['class'],
+        'status' => $desc['status'],
+      ];
+
+      $seats[] = $item;
+    }
+
+    if (count($seats) > 0) {
+      Seats::insert($seats); 
+    }
 
     return UtilController::resultResponse($r);
   }

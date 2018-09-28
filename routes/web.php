@@ -10,12 +10,22 @@
 |
 */
 Route::group(['prefix' => 'cruise'], function () {
-  Route::get('editDest', 'CruiseController@editDest');
+  Route::get('editDest', 'DestinationsController@editDest');
   Route::get('editRoute/{rId?}', 'CruiseController@editRoute');
   Route::get('routeList', 'CruiseController@routeList');
 });
 
-Route::get('createSeat', 'FerriesController@insertSeatsWithRouteId');
+/*
+Route::group(['prefix' => 'cruise'], function () {
+  Route::get('editDest', 'CruiseController@editDest');
+  Route::get('editRoute/{rId?}', 'CruiseController@editRoute');
+  Route::get('routeList', 'CruiseController@routeList');
+});
+*/
+
+// testing routes
+// Route::get('createSeat', 'RoutesController@store');
+
 /*
 Route::get('/', function () {
   $all = '{

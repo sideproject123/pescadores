@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Ferries;
 use Illuminate\Http\Request;
-use Exception;
 
 class FerriesController extends Controller
 {
-  public function createArrayFromRange($range = '', $map)
+  static function createArrayFromRange($range = '', $map)
   {
     $a = [];
 
@@ -33,9 +33,6 @@ class FerriesController extends Controller
 
     $ret = [];
 
-    var_dump($list);
-    var_dump($a);
-    /*
     for ($i = 0, $j = count($a) - 1; $i < $j; ++$i) {
       $tmp = [];
 
@@ -48,45 +45,105 @@ class FerriesController extends Controller
       $ret[] = $tmp;
     }
 
-    return  count($ret) === 1 ? $ret[0] : $ret;
-    */
+    return count($ret) === 1 ? $ret[0] : $ret;
   }
 
-  public function insertSeatsWithRouteId($id = 1) {
-    echo '<pre>';
-    $seatInfo = json_decode(Ferries::find($id)->seatInfo, 'true');
+  static function parseSeatInfo($id = null)
+  {
+    if (!$id) {
+      return;
+    }
+
+    $ferry = Ferries::find($id);
+
+    if (!$ferry) {
+      return;
+    }
+
+    $seatInfo = json_decode($ferry->seatInfo, true);
 
     if (!$seatInfo) {
       return;
     }
 
-    print_r($seatInfo);
-
     $seats = [];
     list($a, $b) = explode('-', $seatInfo['cols']);
     $cols = range($a, $b);
 
-    var_dump($cols);
-    // var_dump($this->createArrayFromRange($seatInfo['attributes']['class']['B'][1], $cols));
-    var_dump($this->createArrayFromRange($seatInfo['attributes']['class']['B'][0], $cols));
     foreach ($seatInfo['attributes'] as $attr => $item) {
       foreach ($item as $key => $rangeList) {
         foreach ($rangeList as $range) {
-          /*
-          var_dump($range);
-          foreach ($this->createArrayFromRange($range, $cols) as $pos) {
+          foreach (FerriesController::createArrayFromRange($range, $cols) as $pos) {
             if (!isset($seats[$pos])) {
               $seats[$pos] = [];
             }
 
-            $seats[$pos] = ['status' => 'reserved'];
+            $seats[$pos][$attr] = $key;
           }
-          */
         }
       }
     }
 
-    var_dump($seats);
+    $ignore = [];
+
+    if (!empty($seatInfo['ignore'])) {
+      foreach ($seatInfo['ignore'] as $range) {
+        $ignore = array_merge($ignore, FerriesController::createArrayFromRange($range, $cols));
+      }
+
+      $ignore = array_flip($ignore);
+    }
+
+    $businVacantNum = 0;
+    $ecoVavantNum = 0;
+
+    for ($i = 1, $j = $seatInfo['rows']; $i <= $j; ++$i) {
+      foreach ($cols as $c) {
+        $pos = $i . $c;
+
+        if (isset($ignore[$pos])) {
+          unset($seats[$pos]);
+          continue;
+        }
+
+        if (!isset($seats[$pos])) {
+          $seats[$pos] = [
+            'class' => 'E',
+            'status' => 'vacant',
+          ];
+
+          $ecoVavantNum += 1;
+        } else {
+          if (!isset($seats[$pos]['class'])) {
+            $seats[$pos]['class'] = 'E';
+          }
+
+          if (!isset($seats[$pos]['status'])) {
+            $seats[$pos]['status'] = 'vacant';
+          }
+
+          if (!isset($seats[$pos]['area'])) {
+            $seats[$pos]['area'] = 'lower';
+          } 
+
+          if ($seats[$pos]['status'] === 'vacant') {
+            $cls = $seats[$pos]['class'];
+
+            if ($cls === 'B') {
+              $businVacantNum += 1;
+            } else if ($cls === 'E') {
+              $ecoVavantNum += 1;
+            }
+          }
+        }
+      } 
+    }
+
+    $seatInfo['seats'] = $seats;
+    $seatInfo['businessNum'] = $businVacantNum;
+    $seatInfo['economicNum'] = $ecoVavantNum;
+
+    return $seatInfo;
   }
 
   /**
