@@ -43,6 +43,10 @@ class Kernel extends HttpKernel
       'bindings',
     ],
 
+    'auth' => [
+      \App\Http\Middleware\Auth::class,
+    ],
+
     'test' => [
       \App\Http\Middleware\TestFirst::class,
       \App\Http\Middleware\TestSecond::class,

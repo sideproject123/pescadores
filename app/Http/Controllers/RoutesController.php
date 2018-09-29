@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Validator;
+use App\Destinations;
 use App\Ferries;
 use App\Routes;
 use App\Seats;
 use App\Http\Controllers\FerriesController; 
 use App\Http\Controllers\UtilController; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoutesController extends Controller
 {
@@ -110,12 +112,20 @@ class RoutesController extends Controller
   /**
    * Show the form for editing the specified resource.
    *
+   * @param  \Illuminate\Http\Request  $request
    * @param  \App\Routes  $routes
-   * @return \Illuminate\Http\Response
+   * @return view
    */
-  public function edit(Routes $routes)
+  public function edit(Request $request, Routes $routes)
   {
-    //
+    $params = $request->__params;
+    $params['destinations'] = Destinations::select('*', 'id as value', 'name as displayName')->get();
+    $params['ferries'] = Ferries::select('*', 'id as value', 'name as displayName')->get();
+    $rId = $request->rId;
+    $route = $rId ? Routes::find($rId) : [];
+    $params['route'] = $route;
+
+    return view('control_panel_cruise_edit_route', $params);
   }
 
   /**
@@ -217,5 +227,27 @@ class RoutesController extends Controller
     }
 
     return '';
+  }
+
+  public function list(Request $request)
+  {
+    $params = $request->__params;
+    $params['routes'] = DB::table('routes') 
+              ->join('destinations as d1', 'routes.fromDestinationId', '=', 'd1.id')
+              ->join('destinations as d2', 'routes.toDestinationId', '=', 'd2.id')
+              ->join('ferries', 'routes.ferryId', '=', 'ferries.id')
+              ->select(
+                'routes.id',
+                'routes.status',
+                'd1.name as fromName',
+                'd2.name as toName',
+                'datetime',
+                'ferries.name as ferryName'
+              )
+              ->orderBy('updated_at', 'desc')
+              ->get();
+    $params['statusMap'] = Routes::$statusMap;
+
+    return view('control_panel_cruise_route_list', $params);
   }
 }

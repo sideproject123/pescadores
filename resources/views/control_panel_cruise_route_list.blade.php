@@ -3,5 +3,5 @@
 <div class="route-list" section="routeList">
   @include('shared.cruise.routes_table', ['data' => $routes, 'statusMap' => $statusMap])
 </div>
-@include('shared.cruise.seat_layout_ferry_1')
+<iframe data-fn="seatLayout" src="" width="100%" height="500"></iframe>
 @endsection

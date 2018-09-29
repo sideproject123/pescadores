@@ -34361,9 +34361,15 @@ var Cruise = function () {
           });
           break;
         case 'reserve':
-          var _SeatLayout = this.routesVars.SeatLayout;
-
-          console.log(_SeatLayout);
+          this.o.find('[data-fn="seatLayout"]').attr('src', '/cruise/seatLayout/' + id);
+          /*
+          routesVars.SeatLayout = new SeatLayout({
+            action: 'reserve',
+            o: this.o.find('[data-fn="seatLayout"]'),
+          });
+          const { routesVars: { SeatLayout } } = this;
+          console.log(SeatLayout);
+          */
           break;
         default:
           break;
@@ -34377,10 +34383,6 @@ var Cruise = function () {
       var table = o.find('[data-table-id="routes"]');
       routesVars.statusMap = table.data('statusMap');
       routesVars.table = table.click(this.routesActionHandler).DataTable();
-      routesVars.SeatLayout = new SeatLayout({
-        action: 'reserve',
-        o: this.o.find('[data-fn="seatLayout"]')
-      });
     }
   }]);
 

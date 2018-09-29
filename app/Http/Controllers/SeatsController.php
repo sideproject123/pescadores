@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Seats;
 use Illuminate\Http\Request;
 
@@ -85,12 +86,27 @@ class SeatsController extends Controller
 
   static function getSeatsByFields($fields = [])
   {
-    $seats = [];
-
     if (empty($fields)) {
-      return $seats;
+      return [];
     }
 
-    return Seats::where($fields);
+    return $seats = Seats::where($fields)->get();
+  }
+
+  public function layout($rId = '', Request $request)
+  {
+    if (!$rId) {
+      return response('missing rId field', 422);
+    }
+
+    $params = $request->__params;
+    $params['seats'] = SeatsController::getSeatsByFields(['route_id' => $rId]);
+
+    echo '<pre>';
+    foreach ($params['seats'] as $seat) {
+      print_r($seat);
+    }
+
+    // return view('shared.cruise.seat_layout_ferry_1', $params);
   }
 }

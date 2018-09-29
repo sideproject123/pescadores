@@ -71,12 +71,20 @@ class DestinationsController extends Controller
   /**
    * Show the form for editing the specified resource.
    *
+   * @param  \Illuminate\Http\Request  $request
    * @param  \App\Destinations  $destinations
    * @return \Illuminate\Http\Response
    */
-  public function edit(Destinations $destinations)
+  public function edit(Request $request, Destinations $destinations)
   {
-      //
+    $params = $request->__params;
+    $params['data'] = Destinations::all();
+    $params['cols'] = array(
+      array('title' => '名稱', 'field' => 'name'),
+      array('title' => '', 'field' => 'status')
+    );
+
+    return view('control_panel_cruise_edit_dest', $params);
   }
 
   /**
@@ -125,21 +133,5 @@ class DestinationsController extends Controller
   public function getAll()
   {
     return Destinations::all();
-  }
-
-  public function editDest(Request $request)
-  {
-    var_dump($request->all());
-    
-    /*
-    $params = $this->params;
-    $params['data'] = Destinations::all();
-    $params['cols'] = array(
-      array('title' => '名稱', 'field' => 'name'),
-      array('title' => '', 'field' => 'status')
-    );
-
-    return view('control_panel_cruise_edit_dest', $params);
-    */
   }
 }

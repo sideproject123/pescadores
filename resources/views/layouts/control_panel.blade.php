@@ -3,23 +3,23 @@
     @include('shared.control_panel_header')
     <div class="content">
       <div class="sidebar">
-        <ul class="functions">
-        @foreach ($functions as $fn)
+        <ul class="menus">
+        @foreach ($menus as $m)
           <li>
-            <a href="{{ $fn['name'] }}" target="_self">{{ $fn['displayName'] }}</a>
+            <a href="{{ $m['name'] }}" target="_self">{{ $m['displayName'] }}</a>
           </li>   
         @endforeach
         </ul>
       </div>
       <div class="main">
         <ul class="sub-functions">
-        @foreach ($function['subFunctions'] as $fn)
+        @foreach ($subMenus as $m)
           <li>
-            <a href="{{ $fn['url'] }}" target="_self">{{ $fn['displayName'] }}</a>
+            <a href="{{ $m['url'] }}" target="_self">{{ $m['displayName'] }}</a>
           </li>   
         @endforeach
         </ul>
-        <div id="{{ $function['id'] }}">
+        <div id="{{ $menuId }}">
           @yield('main')
         </div>
       </div>
