@@ -64,11 +64,30 @@ body {
   width: 75%;
 }
 
+.destinations-table {
+  .actions {
+    [type*="disable"]  {
+      display: none; 
+    }
+
+    &.active {
+      [type*="enable"] {
+        display: none;
+      }
+
+      [type*="disable"] {
+        display: block;
+      }
+    }
+  } 
+}
+
 .seat-layout {
   $reserved: #98a4a7;
-  $sold: #f8386e;
+  $taken: #f8386e;
   $selected: #86f5c0;
   $vacant: #fff;
+  $economy: #fff;
   $business: #ff0;
 
   %seat {
@@ -108,17 +127,18 @@ body {
 
   &-illustration {
     .reserved,
-    .sold,
+    .taken,
     .vacant,
     .selected,
     .forbidden,
-    .class-B
+    .class-B,
+    .class-E
     {
       @extend %seat;
       display: inline-block;
     }
 
-    .vacant {
+    .class-E, .vacant {
       background-color: $vacant;
     }
 
@@ -126,8 +146,8 @@ body {
       background-color: $reserved;
     }
 
-    .sold {
-      background-color: $sold;
+    .taken {
+      background-color: $taken;
     }
 
     .selected {
@@ -164,14 +184,14 @@ body {
     user-select: none;
     text-align: center;
 
-    &.sold,
+    &.taken,
     &.na,
     &.forbidden
     {
       pointer-events: none;
     }
 
-    &.vacant {
+    &.class-E, &.vacant {
       background-color: $vacant;
     }
 
@@ -183,8 +203,8 @@ body {
       background-color: $reserved;
     }
 
-    &.sold {
-      background-color: $sold;
+    &.taken {
+      background-color: $taken;
     }
 
     &.selected {

@@ -34274,11 +34274,12 @@ var Cruise = function () {
             method: 'PUT',
             data: data
           }).done(function (res) {
-            window.location.replace(redirectUrl);
+            // window.location.replace(redirectUrl);
           });
         } else {
           $.post('/api/routes', data).done(function (res) {
-            window.location.replace(redirectUrl);
+            console.log(res);
+            // window.location.replace(redirectUrl);
           });
         }
       });
@@ -34361,15 +34362,18 @@ var Cruise = function () {
           });
           break;
         case 'reserve':
-          this.o.find('[data-fn="seatLayout"]').attr('src', '/cruise/seatLayout/' + id);
-          /*
-          routesVars.SeatLayout = new SeatLayout({
-            action: 'reserve',
-            o: this.o.find('[data-fn="seatLayout"]'),
+          var fId = t.data('fid');
+          var seatLayoutContainer = this.routesVars.seatLayoutContainer;
+
+
+          $.get('/api/seats/layout', { rId: id, fId: fId }).done(function (res) {
+            seatLayoutContainer.empty();
+            seatLayoutContainer.html(res);
+            new SeatLayout({
+              action: 'reserve',
+              o: seatLayoutContainer.find('[data-fn="seatLayout"]')
+            });
           });
-          const { routesVars: { SeatLayout } } = this;
-          console.log(SeatLayout);
-          */
           break;
         default:
           break;
@@ -34383,6 +34387,7 @@ var Cruise = function () {
       var table = o.find('[data-table-id="routes"]');
       routesVars.statusMap = table.data('statusMap');
       routesVars.table = table.click(this.routesActionHandler).DataTable();
+      routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
     }
   }]);
 
@@ -50646,7 +50651,7 @@ exports.SeatLayout = function () {
 
     var seats = {
       reserved: {},
-      sold: {},
+      taken: {},
       na: {},
       selected: {}
     };
@@ -50666,6 +50671,7 @@ exports.SeatLayout = function () {
     this.o = obj;
     this.seats = seats;
     this.action = action;
+    this.routeId = obj.data('rid');
     this.init();
   }
 
@@ -50780,17 +50786,42 @@ exports.SeatLayout = function () {
       o.find('[data-action="submit"]').on('click', function (_ref2) {
         var target = _ref2.target;
 
-        var a = Object.keys(seats.selected).map(function (key) {
+        var list = Object.keys(seats.selected).map(function (key) {
           return key;
         }).sort();
-        var val = $(target).val();
+        var action = $(target).val();
 
-        console.log('val =============>', val);
-        console.log('a =============>', a);
-
-        if (!a.length) {
+        if (!list.length) {
           return;
         }
+
+        $.ajax({
+          url: '/api/seats/changeReserveStatus',
+          method: 'PUT',
+          data: {
+            action: action,
+            rId: _this2.routeId,
+            seats: list
+          }
+        }).done(function (res) {
+          console.log(res);
+
+          _this2.o.find('.seat-layout-cell.selected').each(function (index, item) {
+            var o = $(item);
+
+            o.removeClass('selected');
+
+            if (action === 'reserve') {
+              o.removeClass('vacant').addClass('reserved');
+            } else {
+              o.removeClass('reserved').addClass('vacant');
+            }
+          });
+        }).fail(function (_ref3) {
+          var responseText = _ref3.responseText;
+
+          alert(responseText);
+        });
       });
 
       var cb = function cb() {
@@ -50822,7 +50853,7 @@ exports.SeatLayout = function () {
 
             if (isSelected) {
               n -= 1;
-            } else if (status === 'av' || status === 'reserved') {
+            } else if (status === 'vacant' || status === 'reserved') {
               _this2.toggleCell();
               n -= 1;
             }

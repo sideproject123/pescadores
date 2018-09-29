@@ -137,12 +137,13 @@ class Cruise {
           data,
         })
         .done(res => {
-          window.location.replace(redirectUrl);
+          // window.location.replace(redirectUrl);
         });
       } else {
         $.post('/api/routes', data)
           .done(res => {
-            window.location.replace(redirectUrl);
+            console.log(res);
+            // window.location.replace(redirectUrl);
           });
         }
     });
@@ -219,15 +220,18 @@ class Cruise {
         });
         break;
       case 'reserve':
-        this.o.find('[data-fn="seatLayout"]').attr('src', `/cruise/seatLayout/${id}`);
-        /*
-        routesVars.SeatLayout = new SeatLayout({
-          action: 'reserve',
-          o: this.o.find('[data-fn="seatLayout"]'),
-        });
-        const { routesVars: { SeatLayout } } = this;
-        console.log(SeatLayout);
-        */
+        const fId = t.data('fid');
+        const { routesVars: { seatLayoutContainer } } = this;
+
+        $.get('/api/seats/layout', { rId: id, fId, })
+          .done(res => {
+            seatLayoutContainer.empty();
+            seatLayoutContainer.html(res);
+            new SeatLayout({
+              action: 'reserve',
+              o: seatLayoutContainer.find('[data-fn="seatLayout"]'),
+            });
+          });
         break;
       default:
         break;
@@ -239,6 +243,7 @@ class Cruise {
     const table = o.find('[data-table-id="routes"]');
     routesVars.statusMap = table.data('statusMap');
     routesVars.table = table.click(this.routesActionHandler).DataTable();
+    routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
   } 
 }
 

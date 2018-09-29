@@ -6,11 +6,11 @@
   @endif
   <div class="destination">
     <span class="title">啟點</span>
-    @include('shared.selection', ['list' => $destinations, 'fn' => 'fromDest', 'selected' => empty($route) ? '' : $route['fromDestinationId']])
+    @include('shared.selection', ['list' => $destinations, 'fn' => 'fromDest', 'selected' => empty($route) ? '' : $route['from_destination_id']])
   </div>
   <div class="destination">
     <span class="title">目的地</span>
-    @include('shared.selection', ['list' => $destinations, 'fn' => 'toDest', 'selected' => empty($route) ? '' : $route['toDestinationId']])
+    @include('shared.selection', ['list' => $destinations, 'fn' => 'toDest', 'selected' => empty($route) ? '' : $route['to_destination_id']])
   </div>
   <div class="calendar">
     <span class="title">航班日期</span>
@@ -22,7 +22,7 @@
   </div>
   <div class="ferry">
     <span class="title">航型</span>
-    @include('shared.selection', ['list' => $ferries, 'fn' => 'ferry', 'selected' => empty($route) ? '' : $route['ferryId']])
+    @include('shared.selection', ['list' => $ferries, 'fn' => 'ferry', 'selected' => empty($route) ? '' : $route['ferry_id']])
   </div>
   <div class="submit">
     <button type="button" class="btn" data-fn="submit">確定</button>

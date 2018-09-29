@@ -1,4 +1,4 @@
-<div class="seat-layout ferry-1" data-fn="seatLayout">
+<div class="seat-layout ferry-1" data-fn="seatLayout" data-rid="{{ $routeId }}">
   <ul class="seat-layout-illustration">
     <li class="item">
       <span class="">已保留座位</span>
@@ -6,23 +6,23 @@
     </li>
     <li class="item">
       <span class="">已售出座位</span>
-      <span class="sold"></span>
-    </li>
-    <li class="item">
-      <span class="">可使用座位</span>
-      <span class="vacant"></span>
+      <span class="taken"></span>
     </li>
     <li class="item">
       <span class="">已選擇座位</span>
       <span class="selected"></span>
     </li>
     <li class="item">
-      <span class="">禁止座位</span>
+      <span class="">禁止選擇</span>
       <span class="forbidden"></span>
     </li>
     <li class="item">
       <span class="">商務艙座位</span>
       <span class="class-B"></span>
+    </li>
+    <li class="item">
+      <span class="">一般艙座位</span>
+      <span class="class-E"></span>
     </li>
   </ul>
   <div class="seat-layout-options">
@@ -33,26 +33,36 @@
     </div>
   </div>
   <div class="">
-  @for ($i = 1, $j = 10; $i < $j; $i++) 
-    <ul class="seat-layout-row" data-type="row">
-    @for ($x = 65, $y = 81; $x < $y; $x++)
+  @php
+    list($__x, $__y) = explode('-', $seatInfo['cols']);
+    $__colRange = range($__x, $__y);
+    $__colLen = count($__colRange) - 1;
+  @endphp
+  @for ($i = 1, $j = $seatInfo['rows']; $i < $j; ++$i) 
+    @foreach ($__colRange as $index => $col)
     @php
-      $__c = chr($x);
-      $__no = $i.$__c;
-      $__status = isset($seatStatus[$__no]) ? $seatStatus[$__no] : 'vacant';
-      $__class = isset($seatClass[$__no]) ? $seatClass[$__no] : 'E';
+      $__pos = $i . $col;
+      $__s = isset($seats[$__pos]) ? $seats[$__pos] : '';
     @endphp
+    @if (!$__s)
+      @continue
+    @endif
+    @if ($index === 0)
+    <ul class="seat-layout-row" data-type="row">
+    @endif
       <li
-        class="seat-layout-cell {{ $__status }} class-{{ $__class }}"
+        class="seat-layout-cell {{ $__s['status'] }} class-{{ $__s['class'] }}"
         data-type="cell"
-        data-status="{{ $__status }}"
-        data-row="{{ $i }}"
-        data-col="{{ $__c }}"
+        data-status="{{ $__s['status'] }}"
+        data-row="{{ $__s['row'] }}"
+        data-col="{{ $__s['col'] }}"
       >
-        <span class="text" data-type="text">{{ $__no }}</span>
+        <span class="text" data-type="text">{{ $__s['position'] }}</span>
       </li>    
-    @endfor
+    @if ($index === $__colLen)
     </ul>
+    @endif
+    @endforeach
   @endfor
   </div>
   <div class="actions">

@@ -51,19 +51,19 @@ class FerriesController extends Controller
   static function parseSeatInfo($id = null)
   {
     if (!$id) {
-      return;
+      return [];
     }
 
     $ferry = Ferries::find($id);
 
     if (!$ferry) {
-      return;
+      return [];
     }
 
-    $seatInfo = json_decode($ferry->seatInfo, true);
+    $seatInfo = json_decode($ferry->seat_info, true);
 
     if (!$seatInfo) {
-      return;
+      return [];
     }
 
     $seats = [];
@@ -140,8 +140,8 @@ class FerriesController extends Controller
     }
 
     $seatInfo['seats'] = $seats;
-    $seatInfo['businessNum'] = $businVacantNum;
-    $seatInfo['economicNum'] = $ecoVavantNum;
+    $seatInfo['businessVacantNum'] = $businVacantNum;
+    $seatInfo['economicVacantNum'] = $ecoVavantNum;
 
     return $seatInfo;
   }

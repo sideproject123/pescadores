@@ -69,23 +69,63 @@ class RoutesController extends Controller
       return response($e->getMessage(), 422);
     }
 
-    $r = $routes->firstOrCreate([
-      'fromDestinationId' => $request->from,
-      'toDestinationId' => $request->to,
-      'datetime' => $request->dt,
-      'ferryId' => $request->fId,
-    ]);
+    try {
+      DB::beginTransaction();
 
-    $info = FerriesController::parseSeatInfo($request->fId);
+      $r = $routes->firstOrCreate([
+        'from_destination_id' => $request->from,
+        'to_destination_id' => $request->to,
+        'datetime' => $request->dt,
+        'ferry_id' => $request->fId,
+      ]);
+
+      $info = $this->createSeats($request->fId, $r->id);
+
+      if (!$this->createSeats($request->fId, $r->id)) {
+        return response('create seats error', 422);
+      }
+
+      DB::commit();
+    } catch (Exception $e) {
+      return response($e->getMessage(), 422);
+    }
+
+    // return UtilController::resultResponse($r);
+  }
+
+  public function _createSeats(Request $request)
+  {
+    if (!$this->createSeats($request->fId, $request->rId)) {
+      return response('create seats error', 422);
+    }
+
+    $s = Seats::where('position', '1J')
+      ->orWhere('position', '1K')
+      ->orWhere('position', '2J')
+      ->orWhere('position', '2K')
+      ->orWhere('position', '9J')
+      ->orWhere('position', '9K')
+      ->update(['status' => 'taken']);
+  }
+
+  private function createSeats($ferryId = null, $routeId = null)
+  {
+    if (!$ferryId || !$routeId) {
+      return false; 
+    }
+
+    $info = FerriesController::parseSeatInfo($ferryId);
     $seats = [];
 
     foreach ($info['seats'] as $pos => $desc) {
       $item = [
-        'route_id' => $r->id,
+        'route_id' => $routeId,
         'position' => $pos,
         'area' => $desc['area'],
         'class' => $desc['class'],
         'status' => $desc['status'],
+        'row' => (int)substr($pos, 0, -1),
+        'col' => substr($pos, -1),
       ];
 
       $seats[] = $item;
@@ -95,7 +135,7 @@ class RoutesController extends Controller
       Seats::insert($seats); 
     }
 
-    return UtilController::resultResponse($r);
+    return $info;
   }
 
   /**
@@ -119,7 +159,9 @@ class RoutesController extends Controller
   public function edit(Request $request, Routes $routes)
   {
     $params = $request->__params;
-    $params['destinations'] = Destinations::select('*', 'id as value', 'name as displayName')->get();
+    $params['destinations'] = Destinations::select('*', 'id as value', 'name as displayName')
+                              ->where(['status' => 1])
+                              ->get();
     $params['ferries'] = Ferries::select('*', 'id as value', 'name as displayName')->get();
     $rId = $request->rId;
     $route = $rId ? Routes::find($rId) : [];
@@ -142,10 +184,10 @@ class RoutesController extends Controller
 
       $r = $routes->findOrFail($request->rId);
       $r->update([
-        'fromDestinationId' => $request->from,
-        'toDestinationId' => $request->to,
+        'from_destination_id' => $request->from,
+        'to_destination_id' => $request->to,
         'datetime' => $request->dt,
-        'ferryId' => $request->fId,
+        'ferry_id' => $request->fId,
       ]);
 
       return UtilController::resultResponse($r);
@@ -164,12 +206,12 @@ class RoutesController extends Controller
   {
     try {
       // check if any ticket sold throw error
+      $routes->destroy($id);
+      Seats::where('route_id', $id)->delete();
 
-      return $routes->destroy($id);
-
-      // clear seats
+      return response('', 200);
     } catch (Exception $e) {
-      return response('', 422);
+      return response($e->getMessage(), 422);
     }
   }
 
@@ -233,16 +275,17 @@ class RoutesController extends Controller
   {
     $params = $request->__params;
     $params['routes'] = DB::table('routes') 
-              ->join('destinations as d1', 'routes.fromDestinationId', '=', 'd1.id')
-              ->join('destinations as d2', 'routes.toDestinationId', '=', 'd2.id')
-              ->join('ferries', 'routes.ferryId', '=', 'ferries.id')
+              ->join('destinations as d1', 'routes.from_destination_id', '=', 'd1.id')
+              ->join('destinations as d2', 'routes.to_destination_id', '=', 'd2.id')
+              ->join('ferries', 'routes.ferry_id', '=', 'ferries.id')
               ->select(
                 'routes.id',
                 'routes.status',
                 'd1.name as fromName',
                 'd2.name as toName',
                 'datetime',
-                'ferries.name as ferryName'
+                'ferries.name as ferryName',
+                'ferries.id as ferryId'
               )
               ->orderBy('updated_at', 'desc')
               ->get();

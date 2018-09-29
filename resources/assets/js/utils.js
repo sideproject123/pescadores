@@ -21,7 +21,7 @@ exports.SeatLayout = class SeatLayout {
 
     const seats = {
       reserved: {},
-      sold: {},
+      taken: {},
       na: {},
       selected: {},
     };
@@ -41,6 +41,7 @@ exports.SeatLayout = class SeatLayout {
     this.o = obj;
     this.seats = seats;
     this.action = action;
+    this.routeId = obj.data('rid');
     this.init();
   }  
 
@@ -74,7 +75,6 @@ exports.SeatLayout = class SeatLayout {
 
       cb();
     });
-
   }
 
   toggleCell() {
@@ -150,16 +150,40 @@ exports.SeatLayout = class SeatLayout {
     });
     o.find('[data-action="submit"]')
     .on('click', ({ target }) => {
-      const a = Object.keys(seats.selected).map(key => key).sort();
-      const val = $(target).val();
+      const list = Object.keys(seats.selected).map(key => key).sort();
+      const action = $(target).val();
 
-      console.log('val =============>', val);
-      console.log('a =============>', a);
-      
-      if (!a.length) {
+      if (!list.length) {
         return;
       }
 
+      $.ajax({
+        url: '/api/seats/changeReserveStatus',
+        method: 'PUT',
+        data: {
+          action,
+          rId: this.routeId,
+          seats: list,
+        },
+      })
+      .done(res => {
+        console.log(res);
+
+        this.o.find('.seat-layout-cell.selected').each((index, item) => {
+          const o = $(item);
+
+          o.removeClass('selected');
+
+          if (action === 'reserve') {
+            o.removeClass('vacant').addClass('reserved');
+          } else {
+            o.removeClass('reserved').addClass('vacant');
+          }
+        });
+      })
+      .fail(({ responseText }) => {
+        alert(responseText);
+      });
     });
 
     const cb = () => {
@@ -191,7 +215,7 @@ exports.SeatLayout = class SeatLayout {
           
           if (isSelected) {
             n -= 1;
-          } else if (status === 'av' || status === 'reserved') {
+          } else if (status === 'vacant' || status === 'reserved') {
             this.toggleCell();
             n -= 1;
           } 

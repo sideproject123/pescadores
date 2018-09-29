@@ -9551,14 +9551,26 @@ body {
   width: 75%;
 }
 
+.destinations-table .actions [type*="disable"] {
+  display: none;
+}
+
+.destinations-table .actions.active [type*="enable"] {
+  display: none;
+}
+
+.destinations-table .actions.active [type*="disable"] {
+  display: block;
+}
+
 .seat-layout {
   border: 1px solid #f00;
 }
 
 .seat-layout .seat-layout-illustration .reserved,
 .seat-layout-illustration .seat-layout .reserved,
-.seat-layout .seat-layout-illustration .sold,
-.seat-layout-illustration .seat-layout .sold,
+.seat-layout .seat-layout-illustration .taken,
+.seat-layout-illustration .seat-layout .taken,
 .seat-layout .seat-layout-illustration .vacant,
 .seat-layout-illustration .seat-layout .vacant,
 .seat-layout .seat-layout-illustration .selected,
@@ -9567,6 +9579,8 @@ body {
 .seat-layout-illustration .seat-layout .forbidden,
 .seat-layout .seat-layout-illustration .class-B,
 .seat-layout-illustration .seat-layout .class-B,
+.seat-layout .seat-layout-illustration .class-E,
+.seat-layout-illustration .seat-layout .class-E,
 .seat-layout .seat-layout-cell {
   width: 26px;
   height: 20px;
@@ -9603,14 +9617,16 @@ body {
 }
 
 .seat-layout-illustration .reserved,
-.seat-layout-illustration .sold,
+.seat-layout-illustration .taken,
 .seat-layout-illustration .vacant,
 .seat-layout-illustration .selected,
 .seat-layout-illustration .forbidden,
-.seat-layout-illustration .class-B {
+.seat-layout-illustration .class-B,
+.seat-layout-illustration .class-E {
   display: inline-block;
 }
 
+.seat-layout-illustration .class-E,
 .seat-layout-illustration .vacant {
   background-color: #fff;
 }
@@ -9619,7 +9635,7 @@ body {
   background-color: #98a4a7;
 }
 
-.seat-layout-illustration .sold {
+.seat-layout-illustration .taken {
   background-color: #f8386e;
 }
 
@@ -9655,12 +9671,13 @@ body {
   text-align: center;
 }
 
-.seat-layout-cell.sold,
+.seat-layout-cell.taken,
 .seat-layout-cell.na,
 .seat-layout-cell.forbidden {
   pointer-events: none;
 }
 
+.seat-layout-cell.class-E,
 .seat-layout-cell.vacant {
   background-color: #fff;
 }
@@ -9673,7 +9690,7 @@ body {
   background-color: #98a4a7;
 }
 
-.seat-layout-cell.sold {
+.seat-layout-cell.taken {
   background-color: #f8386e;
 }
 

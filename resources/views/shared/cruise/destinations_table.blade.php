@@ -1,4 +1,4 @@
-<table class="" data-table-id="destinations">
+<table class="destinations-table" data-table-id="destinations">
   <thead>
     <tr>
       <td data-visible="false">ID</td>

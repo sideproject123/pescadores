@@ -14,13 +14,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('editDest', 'DestinationsController@edit');
     Route::get('editRoute/{rId?}', 'RoutesController@edit');
     Route::get('routeList', 'RoutesController@list');
-    Route::get('seatLayout/{rId}/', 'SeatsController@layout');
+    // Route::get('seatLayout/{rId}/', 'SeatsController@layout');
   });
 });
 
 
 // testing routes
-// Route::get('createSeat', 'RoutesController@store');
+Route::get('createSeats', 'RoutesController@_createSeats');
 
 /*
 Route::get('/', function () {

@@ -23,7 +23,6 @@
       <td data-cell-key="remain">remain</td>
       <td data-cell-key="function">
         @if ($d->status === 'pending')
-        <a href="/cruise/editRoute/{{ $d->id }}" class="edit">修改</a> 
         <button type="text" data-action="activate" data-id="{{ $d->id }}" class="active">啟用</button>
         <button type="text" data-action="delete" data-id="{{ $d->id }}" class="delete">刪除</button>
         @endif
@@ -31,7 +30,7 @@
         <button type="text" data-action="cancel" data-id="{{ $d->id }}" class="cancelled">停售</button>
         @endif
         @if ($d->status === 'pending' || $d->status === 'active')
-        <button type="text" data-action="reserve" data-id="{{ $d->id }}" class="function">劃位</button>
+        <button type="text" data-action="reserve" data-id="{{ $d->id }}" data-fid="{{ $d->ferryId }}" class="function">劃位</button>
         @endif
       </td>
     </tr>      

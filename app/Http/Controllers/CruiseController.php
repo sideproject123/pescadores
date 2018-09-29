@@ -91,9 +91,9 @@ class CruiseController extends Controller
     $params = $this->params;
 
     $routes = DB::table('routes') 
-                ->join('destinations as d1', 'routes.fromDestinationId', '=', 'd1.id')
-                ->join('destinations as d2', 'routes.toDestinationId', '=', 'd2.id')
-                ->join('ferries', 'routes.ferryId', '=', 'ferries.id')
+                ->join('destinations as d1', 'routes.from_destination_id', '=', 'd1.id')
+                ->join('destinations as d2', 'routes.to_destination_id', '=', 'd2.id')
+                ->join('ferries', 'routes.ferry_id', '=', 'ferries.id')
                 ->select(
                   'routes.id',
                   'routes.status',
