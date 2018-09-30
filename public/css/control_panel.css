@@ -9563,6 +9563,21 @@ body {
   display: block;
 }
 
+.routes-table td.actions .btn {
+  display: none;
+}
+
+.routes-table tr.pending .btn.activate,
+.routes-table tr.pending .btn.delete,
+.routes-table tr.pending .btn.reserve {
+  display: inline-block;
+}
+
+.routes-table tr.active .btn.cancel,
+.routes-table tr.active .btn.reserve {
+  display: inline-block;
+}
+
 .seat-layout {
   border: 1px solid #f00;
 }

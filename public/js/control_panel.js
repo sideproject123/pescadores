@@ -34279,7 +34279,7 @@ var Cruise = function () {
           statusMap = _routesVars.statusMap,
           table = _routesVars.table;
 
-      var tr = target.closest('tr');
+      var tr = target.closest('tr[data-row-index]');
       var rowIndex = tr.data('rowIndex');
       var currentStatusName = tr.find('[data-cell-key="status"]').html();
       var data = table.row(rowIndex).data();
@@ -34335,12 +34335,17 @@ var Cruise = function () {
           });
           break;
         case 'delete':
+          var table = this.routesVars.table;
+
+
           $.ajax({
             url: '/api/routes/' + id,
             method: 'DELETE'
           }).done(function () {
             var table = _this2.routesVars.table;
 
+
+            var rowIndex = t.closest('tr[data-row-index]').data('rowIndex');
 
             table.row(rowIndex).remove().draw();
           });

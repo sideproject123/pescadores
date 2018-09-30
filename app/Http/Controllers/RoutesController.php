@@ -261,10 +261,7 @@ class RoutesController extends Controller
       }
 
       $r = $routes->findOrFail($request->id);
-      $r->update([
-        'status' => $request->status,
-      ]);
-
+      
       switch ($request->status) {
         case 'cancelled':
           // cancel ticket
@@ -274,6 +271,10 @@ class RoutesController extends Controller
         default:
           break;
       }
+
+      $r->update([
+        'status' => $request->status,
+      ]);
 
 
     } catch (Exception $e) {

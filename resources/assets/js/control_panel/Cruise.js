@@ -157,7 +157,7 @@ class Cruise {
       statusMap,
       table,
     }} = this;
-    const tr = target.closest('tr');
+    const tr = target.closest('tr[data-row-index]');
     const rowIndex = tr.data('rowIndex');
     const currentStatusName = tr.find('[data-cell-key="status"]').html();
     const data = table.row(rowIndex).data();
@@ -206,6 +206,10 @@ class Cruise {
         .done(() => this.routesTableUpdateStatus(t, 'cancelled'));
         break;
       case 'delete':
+        const { routesVars: {
+          table,
+        }} = this;
+
         $.ajax({
           url: `/api/routes/${id}`,
           method: 'DELETE',
@@ -214,6 +218,8 @@ class Cruise {
           const { routesVars: {
             table,
           }} = this;
+
+          const rowIndex = t.closest('tr[data-row-index]').data('rowIndex'); 
 
           table.row(rowIndex).remove().draw();
         });

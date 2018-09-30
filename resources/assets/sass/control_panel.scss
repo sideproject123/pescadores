@@ -82,6 +82,31 @@ body {
   } 
 }
 
+.routes-table {
+  td.actions {
+    .btn {
+      display: none;
+    }
+  }
+
+  tr.pending {
+    .btn.activate,
+    .btn.delete,
+    .btn.reserve,
+    {
+      display: inline-block;
+    }
+  }
+
+  tr.active {
+    .btn.cancel,
+    .btn.reserve
+    {
+      display: inline-block;
+    }
+  }
+}
+
 .seat-layout {
   $reserved: #98a4a7;
   $taken: #f8386e;
