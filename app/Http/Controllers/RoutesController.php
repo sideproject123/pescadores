@@ -12,6 +12,7 @@ use App\Http\Controllers\FerriesController;
 use App\Http\Controllers\UtilController; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RoutesController extends Controller
 {
@@ -72,6 +73,21 @@ class RoutesController extends Controller
     try {
       DB::beginTransaction();
 
+      /*
+      $t = [
+        'from' => null,
+        'to' => 1,
+        'dt' => 'abcd',
+        'fId' => 1,
+      ];
+      $r = $routes->firstOrCreate([
+        'from_destination_id' => $t['from'],
+        'to_destination_id' => $t['to'],
+        'datetime' => $t['dt'],
+        'ferry_id' => $t['fId'],
+      ]);
+      */
+
       $r = $routes->firstOrCreate([
         'from_destination_id' => $request->from,
         'to_destination_id' => $request->to,
@@ -79,18 +95,27 @@ class RoutesController extends Controller
         'ferry_id' => $request->fId,
       ]);
 
+      // $info = $this->createSeats(1, 1);
       $info = $this->createSeats($request->fId, $r->id);
 
-      if (!$this->createSeats($request->fId, $r->id)) {
-        return response('create seats error', 422);
+      if (!$info) {
+        throw new Exception();
       }
 
-      DB::commit();
-    } catch (Exception $e) {
-      return response($e->getMessage(), 422);
-    }
+      $r->update([
+        'class_b_seats' => $info['businessVacantNum'],
+        'class_e_seats' => $info['economicVacantNum'],
+      ]);
 
-    // return UtilController::resultResponse($r);
+      DB::commit();
+
+      return UtilController::resultResponse($r);
+    } catch (Exception $e) {
+      DB::rollBack();
+      $msg = 'create route & seats error: ' . $e->getMessage();
+      Log::error($msg);
+      return response('database error', 422);
+    }
   }
 
   public function _createSeats(Request $request)
@@ -115,6 +140,11 @@ class RoutesController extends Controller
     }
 
     $info = FerriesController::parseSeatInfo($ferryId);
+
+    if (empty($info)) {
+      return false;
+    }
+
     $seats = [];
 
     foreach ($info['seats'] as $pos => $desc) {
@@ -131,8 +161,10 @@ class RoutesController extends Controller
       $seats[] = $item;
     }
 
-    if (count($seats) > 0) {
+    try {
       Seats::insert($seats); 
+    } catch (Exception $e) {
+      return true;
     }
 
     return $info;

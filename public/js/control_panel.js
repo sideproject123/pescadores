@@ -13337,8 +13337,6 @@ module.exports = __webpack_require__(17);
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 __webpack_require__(18);
 var Cruise = __webpack_require__(43);
 
@@ -13357,69 +13355,56 @@ $(function () {
     minDate: new Date()
   });
 
-  var executeFnIfExist = function executeFnIfExist() {
-    var arg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  $.each(doms, function (key, fn) {
+    var o = $('#' + key);
 
-    var _loop = function _loop() {
-      o = $('#' + key);
-      fn = arg[key];
-
-
-      if (o.length === 0) {
-        console.error('DOM: ' + key + ' does not exist');
-        return {
-          v: void 0
-        };
-      }
-
-      if (typeof fn !== 'function') {
-        console.error(key + ' function does not exist');
-        return {
-          v: void 0
-        };
-      }
-
-      if (o.length > 1) {
-        console.warn('DOM: ' + key + ' more than one');
-      }
-
-      var obj = new fn();
-
-      Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(function (key) {
-        if (key === 'constructor') {
-          return;
-        }
-
-        obj[key] = obj[key].bind(obj);
-      });
-
-      obj.o = o;
-      obj.el = o[0];
-      obj.sections = o.find('[section]');
-      obj.sections.each(function (i, sec) {
-        var m = obj[$(sec).attr('section')];
-
-        if (typeof m === 'function') {
-          m($(sec));
-        }
-      });
-
-      if (typeof obj.run === 'function') {
-        obj.run();
-      }
-    };
-
-    for (var key in arg) {
-      var o;
-      var fn;
-
-      var _ret = _loop();
-
-      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+    if (o.length === 0) {
+      console.error('DOM: ' + key + ' does not exist');
+      return;
     }
-  };
 
-  executeFnIfExist(doms);
+    if (o.length > 1) {
+      console.warn('DOM: ' + key + ' more than one');
+    }
+
+    if (typeof fn !== 'function') {
+      console.error(key + ' function does not exist');
+      return;
+    }
+
+    var obj = new fn();
+
+    Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(function (key) {
+      if (key === 'constructor') {
+        return;
+      }
+
+      var m = obj[key];
+
+      if (typeof m === 'function') {
+        obj[key] = m.bind(obj);
+      }
+    });
+
+    obj.o = o;
+    obj.el = o[0];
+    obj.sections = [];
+
+    o.find('[section]').each(function (i, s) {
+      var sec = $(s);
+      var m = obj[sec.attr('section')];
+
+      obj.sections.push(sec);
+
+      if (typeof m === 'function') {
+        m(sec);
+      }
+    });
+
+    if (typeof obj.run === 'function') {
+      obj.run();
+    }
+  });
 });
 
 /***/ }),
@@ -34274,12 +34259,11 @@ var Cruise = function () {
             method: 'PUT',
             data: data
           }).done(function (res) {
-            // window.location.replace(redirectUrl);
+            window.location.replace(redirectUrl);
           });
         } else {
           $.post('/api/routes', data).done(function (res) {
-            console.log(res);
-            // window.location.replace(redirectUrl);
+            window.location.replace(redirectUrl);
           });
         }
       });

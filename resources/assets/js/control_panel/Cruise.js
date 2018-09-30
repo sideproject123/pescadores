@@ -137,13 +137,12 @@ class Cruise {
           data,
         })
         .done(res => {
-          // window.location.replace(redirectUrl);
+          window.location.replace(redirectUrl);
         });
       } else {
         $.post('/api/routes', data)
           .done(res => {
-            console.log(res);
-            // window.location.replace(redirectUrl);
+            window.location.replace(redirectUrl);
           });
         }
     });

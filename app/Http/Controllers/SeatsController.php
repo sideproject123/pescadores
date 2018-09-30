@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Validator;
+use App\Routes;
 use App\Seats;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class SeatsController extends Controller
       DB::beginTransaction();
 
       $s = $seats
+            ->where('route_id', $request->rId)
             ->whereIn('position', $request->seats)
             ->whereIn('status', ['vacant', 'reserved'])
             ->lockForUpdate();
@@ -38,12 +40,42 @@ class SeatsController extends Controller
         throw new Exception('座位衝突');
       }
 
-      $newStatus = $request->action === 'reserve' ? 'reserved' : 'vacant';
+      $bClassNum = 0;
+      $eClassNum = 0;
 
-      $s->update(['status' => $newStatus]);
+      foreach ($s->get() as $item) {
+        switch ($item->class) {
+          case 'E':
+            $eClassNum += 1;
+            break;
+          case 'B':
+            $bClassNum += 1;
+            break;
+        }
+      }
+
+      $r = Routes::find($request->rId);
+
+      if ($request->action === 'reserve') {
+        $seatUpdate = ['status' => 'reserved'];
+        $routeUpdate = [
+          'class_b_seats' => max($r->class_b_seats - $bClassNum, 0),
+          'class_e_seats' => max($r->class_e_seats - $eClassNum, 0),
+        ];
+      } else {
+        $seatUpdate = ['status' => 'vacant'];
+        $routeUpdate = [
+          'class_b_seats' => min($r->class_b_seats + $bClassNum, 65535),
+          'class_e_seats' => min($r->class_e_seats + $eClassNum, 65535),
+        ];
+      }
+
+      $s->update($seatUpdate);
+      $r->update($routeUpdate);
 
       DB::commit();
     } catch (Exception $e) {
+      DB::rollBack();
       return response($e->getMessage(), 422);
     }
   }
