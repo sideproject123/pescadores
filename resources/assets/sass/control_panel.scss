@@ -100,7 +100,16 @@ body {
 
   tr.active {
     .btn.cancel,
-    .btn.reserve
+    .btn.reserve,
+    .btn.refund
+    {
+      display: inline-block;
+    }
+  }
+
+  tr.cancelled {
+    .btn.activate,
+    .btn.refund
     {
       display: inline-block;
     }

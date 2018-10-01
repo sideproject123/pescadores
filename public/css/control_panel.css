@@ -9574,7 +9574,13 @@ body {
 }
 
 .routes-table tr.active .btn.cancel,
-.routes-table tr.active .btn.reserve {
+.routes-table tr.active .btn.reserve,
+.routes-table tr.active .btn.refund {
+  display: inline-block;
+}
+
+.routes-table tr.cancelled .btn.activate,
+.routes-table tr.cancelled .btn.refund {
   display: inline-block;
 }
 
