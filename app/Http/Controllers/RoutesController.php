@@ -306,8 +306,18 @@ class RoutesController extends Controller
 
   public function list(Request $request)
   {
+
+    $validator = Validator::make($request->all(), [
+      'd' => 'date_format:"Y/m/d"|nullable',
+    ]);
+
+    if ($validator->fails()) {
+      return response('', 422);
+    }
+
     $params = $request->__params;
-    $params['routes'] = DB::table('routes') 
+
+    $r = DB::table('routes') 
               ->join('destinations as d1', 'routes.from_destination_id', '=', 'd1.id')
               ->join('destinations as d2', 'routes.to_destination_id', '=', 'd2.id')
               ->join('ferries', 'routes.ferry_id', '=', 'ferries.id')
@@ -319,9 +329,21 @@ class RoutesController extends Controller
                 'datetime',
                 'ferries.name as ferryName',
                 'ferries.id as ferryId'
-              )
-              ->orderBy('updated_at', 'desc')
-              ->get();
+              );
+
+    if (isset($request->d) && $request->d) {
+      $date = $request->d;
+      $start = $date . ' 00:00:00';
+      $end = $date . ' 23:59:59';
+      $params['date'] = $date;
+
+      $r->where('datetime', '>=', $start)->where('datetime', '<=', $end);
+    }
+
+    $r->orderBy('updated_at', 'desc');
+    $r->get();
+
+    $params['routes'] = $r->get();
     $params['statusMap'] = Routes::$statusMap;
 
     return view('control_panel_cruise_route_list', $params);

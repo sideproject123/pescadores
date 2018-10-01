@@ -34373,10 +34373,30 @@ var Cruise = function () {
     value: function routeList(o) {
       var routesVars = this.routesVars;
 
+      var pathname = window.location.pathname;
       var table = o.find('[data-table-id="routes"]');
+      var dp = o.find('[data-fn="datepicker"]').datepicker({
+        onSelect: function onSelect(dateText) {
+          var _window = window,
+              pathname = _window.location.pathname;
+
+          var d = encodeURIComponent(dateText);
+
+          window.location.href = pathname + '?d=' + d;
+        }
+      });
+
       routesVars.statusMap = table.data('statusMap');
       routesVars.table = table.click(this.routesActionHandler).DataTable();
       routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
+
+      o.find('[data-fn="datepicker-click"]').click(function () {
+        dp.datepicker('show');
+      });
+
+      o.find('[data-action="setToday"]').click(function () {
+        window.location.href = '' + pathname;
+      });
     }
   }]);
 

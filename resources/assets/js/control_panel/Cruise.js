@@ -245,10 +245,28 @@ class Cruise {
 
   routeList(o) {
     const { routesVars } = this;
+    const pathname = window.location.pathname;
     const table = o.find('[data-table-id="routes"]');
+    const dp = o.find('[data-fn="datepicker"]').datepicker({
+      onSelect: dateText => {
+        const { location: { pathname } } = window;
+        const d = encodeURIComponent(dateText);
+
+        window.location.href = `${pathname}?d=${d}`;
+      },
+    });
+
     routesVars.statusMap = table.data('statusMap');
     routesVars.table = table.click(this.routesActionHandler).DataTable();
     routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
+
+    o.find('[data-fn="datepicker-click"]').click(() => {
+      dp.datepicker('show');
+    });
+
+    o.find('[data-action="setToday"]').click(() => {
+      window.location.href = `${pathname}`;
+    });
   } 
 }
 
