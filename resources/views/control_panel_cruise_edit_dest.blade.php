@@ -1,5 +1,5 @@
 @extends('layouts.control_panel')
-@section('main')
+@section('content')
 <div class="destination" section="destinations">
   <div>
     <input class="input" type="text" value="" name="name" />

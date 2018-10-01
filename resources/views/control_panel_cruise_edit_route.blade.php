@@ -1,5 +1,5 @@
 @extends('layouts.control_panel')
-@section('main')
+@section('content')
 <div class="edit-route" section="editRoute">
   @if (!empty($route))
   <input type="hidden" name="rId" value="{{ $route->id }}" />

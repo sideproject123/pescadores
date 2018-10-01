@@ -27,6 +27,18 @@ body {
   min-height: 100%;
 }
 
+ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a:active,
+a:hover
+{
+  text-decoration: none;
+}
+
 .datepicker-wrap {
   .calendar {
     width: 40px;
@@ -42,26 +54,45 @@ body {
 }
 
 #app {
-  > .content {
-    display: flex;
-    align-items: stretch;
+  display: flex;
+
+  > .sidebar {
+    border: 1px solid #0f0;
+    height: 100vh;
+    width: 200px;
+    flex: 0 1 200px;
+    background-color: $navy-blue;
+    position: fixed;
+
+    .logo-wrap {
+      border: 1px solid;
+      height: 150px;
+    }
+
+    .menus {
+      .link {
+        color: $gray-white;
+        display: block;
+        padding: 10px 15px;
+      }
+
+      a:hover {
+        background-color: $navy-blue-heavy;
+      }
+    }
+  }
+
+  > .main {
+    border: 1px solid #00f;
+    width: 100%;
+    margin-left: 200px;
   }
 }
 
 #header {
   border: 1px solid #f00;
-  height: 100px;
+  height: 50px;
   overflow: hidden;
-}
-
-.sidebar {
-  border: 1px solid #0f0;
-  width: 25%;
-}
-
-.main {
-  border: 1px solid #00f;
-  width: 75%;
 }
 
 .destinations-table {
