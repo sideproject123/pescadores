@@ -5,7 +5,13 @@ installation
 * git clone project
 * run command: composer install
 * run command: npm install
-* run command: php artisan key:generate
 * copy .env-example .env
+* run command: php artisan key:generate
 * modify database info in .env
 * run command: php artisan serve
+if using Mac + Mysql 8.0+ and phpMyAdmin login error
+try 
+- mysql -uroot -p
+- enter password
+- type: use mysql;
+- type: alter user 'username'@'localhost' identified with mysql_native_password by 'password';
