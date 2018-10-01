@@ -85,7 +85,7 @@ class Cruise {
 
   editRoute(o) {
     const dp = o.find('[data-fn="datepicker"]').datepicker();
-    const tp = o.find('[data-fn="timepicker"]').timepicker(timepicker);
+    const tp = o.find('[data-fn="timepicker"]').timepicker({ ...timepicker });
     const rId = o.find('[name="rId"]').val();
     const fromDestSel = o.find('[data-fn="fromDest"]');
     const toDestSel = o.find('[data-fn="toDest"]');
@@ -162,12 +162,14 @@ class Cruise {
     const currentStatusName = tr.find('[data-cell-key="status"]').html();
     const data = table.row(rowIndex).data();
 
+    tr.removeClass('active pending cancelled completed');
+
     switch (status) {
       case 'active':
-        tr.removeClass('pending').addClass('active');
+        tr.addClass('active');
         break;
       case 'cancelled':
-        tr.removeClass('active').addClass('cancelled');
+        tr.addClass('cancelled');
         break;
     }
 
@@ -248,6 +250,7 @@ class Cruise {
     const pathname = window.location.pathname;
     const table = o.find('[data-table-id="routes"]');
     const dp = o.find('[data-fn="datepicker"]').datepicker({
+      minDate: null,
       onSelect: dateText => {
         const { location: { pathname } } = window;
         const d = encodeURIComponent(dateText);

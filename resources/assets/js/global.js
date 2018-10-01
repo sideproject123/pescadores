@@ -36,8 +36,9 @@ const datatables = {
 const timepicker = {
   timeFormat: 'HH:mm',
   interval: 15,
-  maxTime: '20:00',
   minTime: '6',
+  maxTime: '20',
+  dynamic: false,
 };
 
 module.exports = {

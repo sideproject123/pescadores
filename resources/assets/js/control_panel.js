@@ -15,6 +15,7 @@ $(function () {
   } = require('./global');
 
   $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
+
   $.datepicker.setDefaults({
     minDate: new Date(),
   });

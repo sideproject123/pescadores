@@ -13309,8 +13309,9 @@ var datatables = {
 var timepicker = {
   timeFormat: 'HH:mm',
   interval: 15,
-  maxTime: '20:00',
-  minTime: '6'
+  minTime: '6',
+  maxTime: '20',
+  dynamic: false
 };
 
 module.exports = {
@@ -13351,6 +13352,7 @@ $(function () {
       datatables = _require.datatables;
 
   $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
+
   $.datepicker.setDefaults({
     minDate: new Date()
   });
@@ -34105,6 +34107,8 @@ module.exports = function spread(callback) {
 "use strict";
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34208,7 +34212,7 @@ var Cruise = function () {
     key: 'editRoute',
     value: function editRoute(o) {
       var dp = o.find('[data-fn="datepicker"]').datepicker();
-      var tp = o.find('[data-fn="timepicker"]').timepicker(timepicker);
+      var tp = o.find('[data-fn="timepicker"]').timepicker(_extends({}, timepicker));
       var rId = o.find('[name="rId"]').val();
       var fromDestSel = o.find('[data-fn="fromDest"]');
       var toDestSel = o.find('[data-fn="toDest"]');
@@ -34284,12 +34288,14 @@ var Cruise = function () {
       var currentStatusName = tr.find('[data-cell-key="status"]').html();
       var data = table.row(rowIndex).data();
 
+      tr.removeClass('active pending cancelled completed');
+
       switch (status) {
         case 'active':
-          tr.removeClass('pending').addClass('active');
+          tr.addClass('active');
           break;
         case 'cancelled':
-          tr.removeClass('active').addClass('cancelled');
+          tr.addClass('cancelled');
           break;
       }
 
@@ -34376,6 +34382,7 @@ var Cruise = function () {
       var pathname = window.location.pathname;
       var table = o.find('[data-table-id="routes"]');
       var dp = o.find('[data-fn="datepicker"]').datepicker({
+        minDate: null,
         onSelect: function onSelect(dateText) {
           var _window = window,
               pathname = _window.location.pathname;
