@@ -1,7 +1,4 @@
 'use strict';
-require('datatables.net');
-require('jquery-ui/ui/widgets/datepicker');
-require('jquery-timepicker/jquery.timepicker');
 const { timepicker } = require('../global');
 const { SeatLayout } = require('../utils');
 
@@ -260,15 +257,16 @@ class Cruise {
     });
 
     routesVars.statusMap = table.data('statusMap');
-    routesVars.table = table.click(this.routesActionHandler).DataTable();
+    routesVars.table = table.click(this.routesActionHandler).DataTable({
+      searching: true,
+      paging: true,
+      pageLength: 20,
+      lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "全部"]],
+    });
     routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
 
     o.find('[data-fn="datepicker-click"]').click(() => {
       dp.datepicker('show');
-    });
-
-    o.find('[data-action="setToday"]').click(() => {
-      window.location.href = `${pathname}`;
     });
   } 
 }

@@ -16,6 +16,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('routeList', 'RoutesController@list');
     // Route::get('seatLayout/{rId}/', 'SeatsController@layout');
   });
+
+  Route::group(['prefix' => 'order'], function () {
+    Route::get('editOrder/{oId?}', 'OrdersController@edit');
+  });
 });
 
 
@@ -23,23 +27,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('createSeats', 'RoutesController@_createSeats');
 
 /*
-Route::get('/', function () {
-  $all = '{
-    "functions": [
-      {
-        "name": "order",
-        "displayName": "訂單系統"
-      },
-      {
-        "name": "ferry",
-        "displayName": "船班設定"
-      }
-    ]
-  }';
-
-  $obj = json_decode($all);
-  return view('order', ['functions' => $obj->functions]);
-});
 
 Route::group(['middleware' => ['test'], 'namespace' => 'Admin'], function () {
   Route::get('/admin', 'Ship');

@@ -21,9 +21,8 @@ class RoutesController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    return $this->getAll();
   }
 
   /**
@@ -178,7 +177,6 @@ class RoutesController extends Controller
    */
   public function show(Routes $routes)
   {
-    //
   }
 
   /**
@@ -306,16 +304,38 @@ class RoutesController extends Controller
 
   public function list(Request $request)
   {
+    if (!$request->d) {
+      $request->merge([
+        'd' => date('Y-m-d'),
+      ]); 
+    }
 
-    $validator = Validator::make($request->all(), [
-      'd' => 'date_format:"Y/m/d"|nullable',
-    ]);
+    $routes = $this->getRoutes($request);
 
-    if ($validator->fails()) {
+    if (!$routes) {
       return response('', 422);
     }
 
     $params = $request->__params;
+    $params['routes'] = $routes;
+    $params['statusMap'] = Routes::$statusMap;
+
+    if (isset($request->d) && $request->d) {
+      $params['date'] = $request->d;
+    }
+
+    return view('control_panel_cruise_route_list', $params);
+  }
+
+  public function getRoutes($request)
+  {
+    $validator = Validator::make($request->all(), [
+      'd' => 'date_format:"Y-m-d"',
+    ]);
+
+    if ($validator->fails()) {
+      return false;
+    }
 
     $r = DB::table('routes') 
               ->join('destinations as d1', 'routes.from_destination_id', '=', 'd1.id')
@@ -328,24 +348,21 @@ class RoutesController extends Controller
                 'd2.name as toName',
                 'datetime',
                 'ferries.name as ferryName',
-                'ferries.id as ferryId'
+                'ferries.id as ferryId',
+                'routes.class_b_seats as bSeats',
+                'routes.class_e_seats as eSeats'
               );
 
-    if (isset($request->d) && $request->d) {
-      $date = $request->d;
-      $start = $date . ' 00:00:00';
-      $end = $date . ' 23:59:59';
-      $params['date'] = $date;
+    $r->where('d1.status', '=', 1);
+    $r->where('d2.status', '=', 1);
 
-      $r->where('datetime', '>=', $start)->where('datetime', '<=', $end);
-    }
+    if (isset($request->d) && $request->d) {
+      $r->where('datetime', '>=', $request->d . ' 00:00:00')
+        ->where('datetime', '<=', $request->d . ' 23:59:59');
+    } 
 
     $r->orderBy('updated_at', 'desc');
-    $r->get();
 
-    $params['routes'] = $r->get();
-    $params['statusMap'] = Routes::$statusMap;
-
-    return view('control_panel_cruise_route_list', $params);
+    return $r->get();
   }
 }

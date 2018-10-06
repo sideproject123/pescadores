@@ -13339,11 +13339,11 @@ module.exports = __webpack_require__(17);
 
 
 __webpack_require__(18);
-var Cruise = __webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(8);
+__webpack_require__(46);
 
-var doms = {
-  Cruise: Cruise
-};
+var doms = ['cruise', 'order'];
 
 $(function () {
   __webpack_require__(48);
@@ -13357,11 +13357,10 @@ $(function () {
     minDate: new Date()
   });
 
-  $.each(doms, function (key, fn) {
+  $.each(doms, function (i, key) {
     var o = $('#' + key);
 
     if (o.length === 0) {
-      console.error('DOM: ' + key + ' does not exist');
       return;
     }
 
@@ -13369,8 +13368,13 @@ $(function () {
       console.warn('DOM: ' + key + ' more than one');
     }
 
-    if (typeof fn !== 'function') {
-      console.error(key + ' function does not exist');
+    var k = key.substr(0, 1).toUpperCase() + key.substr(1);
+    var fn = void 0;
+
+    try {
+      fn = __webpack_require__(77)("./" + k);
+    } catch (err) {
+      console.error('Class "' + k + '" does not exist');
       return;
     }
 
@@ -34113,10 +34117,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(44);
-__webpack_require__(8);
-__webpack_require__(46);
-
 var _require = __webpack_require__(10),
     timepicker = _require.timepicker;
 
@@ -34394,15 +34394,16 @@ var Cruise = function () {
       });
 
       routesVars.statusMap = table.data('statusMap');
-      routesVars.table = table.click(this.routesActionHandler).DataTable();
+      routesVars.table = table.click(this.routesActionHandler).DataTable({
+        searching: true,
+        paging: true,
+        pageLength: 20,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "全部"]]
+      });
       routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
 
       o.find('[data-fn="datepicker-click"]').click(function () {
         dp.datepicker('show');
-      });
-
-      o.find('[data-action="setToday"]').click(function () {
-        window.location.href = '' + pathname;
       });
     }
   }]);
@@ -50929,6 +50930,93 @@ return datepicker.regional[ "zh-TW" ];
 
 } ) );
 
+
+/***/ }),
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./Cruise": 43,
+	"./Cruise.js": 43,
+	"./Order": 78,
+	"./Order.js": 78
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 77;
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Order = function () {
+  function Order() {
+    _classCallCheck(this, Order);
+  }
+
+  _createClass(Order, [{
+    key: 'editOrder',
+    value: function editOrder(o) {
+      console.log('o ==================>', o);
+      var dp = o.find('[data-fn="datepicker"]').datepicker();
+
+      o.find('[data-fn="datepicker-click"]').click(function () {
+        dp.datepicker('show');
+      });
+    }
+  }]);
+
+  return Order;
+}();
+
+module.exports = Order;
 
 /***/ })
 /******/ ]);

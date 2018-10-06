@@ -1,11 +1,10 @@
 'use strict';
 require('./bootstrap');
-const Cruise = require('./control_panel/Cruise');
+require('datatables.net');
+require('jquery-ui/ui/widgets/datepicker');
+require('jquery-timepicker/jquery.timepicker');
 
-const doms = {
-  Cruise,
-};
-
+const doms = ['cruise', 'order'];
 
 $(function () {
   require('jquery-ui/ui/i18n/datepicker-zh-TW');
@@ -20,11 +19,10 @@ $(function () {
     minDate: new Date(),
   });
 
-  $.each(doms, (key, fn) => {
+  $.each(doms, (i, key) => {
     const o = $('#' + key);
 
     if (o.length === 0) {
-      console.error('DOM: ' + key + ' does not exist');
       return;
     }
 
@@ -32,8 +30,13 @@ $(function () {
       console.warn('DOM: ' + key + ' more than one');
     }
 
-    if (typeof fn !== 'function') {
-      console.error(key + ' function does not exist');
+    const k = key.substr(0, 1).toUpperCase() + key.substr(1);
+    let fn;
+
+    try {
+      fn = require(`./control_panel/${k}`);
+    } catch (err) {
+      console.error(`Class "${k}" does not exist`);
       return;
     }
 

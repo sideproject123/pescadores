@@ -1,7 +1,6 @@
 <div class="routes-table-container">
   <div class="search-filter">
     @include('shared.datepicker', ['date' => isset($date) ? $date : ''])
-    <span class="today" data-action="setToday">今日</span>
   </div>
   <table class="routes-table" data-table-id="routes" data-status-map="{{ json_encode($statusMap, true) }}">
     <thead>

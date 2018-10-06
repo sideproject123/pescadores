@@ -1,4 +1,14 @@
-@include('shared.control_panel_before_body')
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ __('title') }}</title>
+  <link href="//fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+  <link href="{{ asset('css/control_panel.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
   <div id="app">
     <div class="sidebar">
       <div class="logo-wrap">
@@ -6,7 +16,7 @@
       <ul class="menus">
       @foreach ($menus as $m)
         <li>
-          <a class="link" href="{{ $m['name'] }}" target="_self">{{ $m['displayName'] }}</a>
+          <a class="link" href="{{ $m['url'] }}" target="_self">{{ $m['displayName'] }}</a>
         </li>   
       @endforeach
       </ul>
@@ -23,10 +33,10 @@
         </ul>
         <div id="{{ $menuId }}">
           @yield('content')
-          @yield('content')
-          @yield('content')
         </div>
       </div>
     </div>
   </div>
-@include('shared.control_panel_after_footer')
+  <script src="{{ asset('js/control_panel.js') }}"></script>
+</body>
+</html>

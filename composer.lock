@@ -822,27 +822,29 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "3.0.10",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maatwebsite/Laravel-Excel.git",
-                "reference": "ad847be7df3519cdf6604eba0175fa6db1823340"
+                "reference": "7f2cdb5ac02401460c52e09ad64cdcd91c97732f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/ad847be7df3519cdf6604eba0175fa6db1823340",
-                "reference": "ad847be7df3519cdf6604eba0175fa6db1823340",
+                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/7f2cdb5ac02401460c52e09ad64cdcd91c97732f",
+                "reference": "7f2cdb5ac02401460c52e09ad64cdcd91c97732f",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^5.5",
+                "illuminate/support": "5.5.* || 5.6.* || 5.7.*",
                 "php": "^7.0",
-                "phpoffice/phpspreadsheet": "^1.2"
+                "phpoffice/phpspreadsheet": "^1.4"
             },
             "require-dev": {
+                "mockery/mockery": "^1.1",
                 "orchestra/database": "^3.6",
                 "orchestra/testbench": "^3.6",
-                "phpunit/phpunit": "~7.0"
+                "phpunit/phpunit": "^7.0",
+                "predis/predis": "^1.1"
             },
             "type": "library",
             "extra": {
@@ -870,7 +872,7 @@
                     "email": "patrick@maatwebsite.nl"
                 }
             ],
-            "description": "An eloquent way of importing and exporting Excel and CSV",
+            "description": "Supercharged Excel exports and imports in Laravel",
             "keywords": [
                 "PHPExcel",
                 "batch",
@@ -882,7 +884,7 @@
                 "php",
                 "phpspreadsheet"
             ],
-            "time": "2018-08-26T09:50:19+00:00"
+            "time": "2018-10-04T09:00:36+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1254,16 +1256,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "125f462a718956f37d81305ca0df4f17cef0f3b9"
+                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/125f462a718956f37d81305ca0df4f17cef0f3b9",
-                "reference": "125f462a718956f37d81305ca0df4f17cef0f3b9",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/57404f43742a8164b5eac3ab03b962d8740885c1",
+                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1",
                 "shasum": ""
             },
             "require": {
@@ -1296,7 +1298,7 @@
                 "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
                 "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
                 "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
-                "tecnick.com/tcpdf": "Option for rendering PDF with PDF Writer"
+                "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
             },
             "type": "library",
             "autoload": {
@@ -1337,7 +1339,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2018-08-06T02:58:06+00:00"
+            "time": "2018-09-30T03:57:24+00:00"
         },
         {
             "name": "psr/container",
@@ -2714,16 +2716,16 @@
         },
         {
             "name": "yajra/laravel-datatables-buttons",
-            "version": "v4.2.0",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-buttons.git",
-                "reference": "1f497104fb10e071e0af7aabd555d960b71721f4"
+                "reference": "3a4844d609bc086b9ce2ea2e20d8f62370ab3bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-buttons/zipball/1f497104fb10e071e0af7aabd555d960b71721f4",
-                "reference": "1f497104fb10e071e0af7aabd555d960b71721f4",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-buttons/zipball/3a4844d609bc086b9ce2ea2e20d8f62370ab3bbc",
+                "reference": "3a4844d609bc086b9ce2ea2e20d8f62370ab3bbc",
                 "shasum": ""
             },
             "require": {
@@ -2774,7 +2776,7 @@
                 "jquery",
                 "laravel"
             ],
-            "time": "2018-09-05T06:05:49+00:00"
+            "time": "2018-09-25T05:03:12+00:00"
         },
         {
             "name": "yajra/laravel-datatables-fractal",
