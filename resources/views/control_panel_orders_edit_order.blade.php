@@ -17,7 +17,7 @@
         <input type="radio" name="trip" value="round" />
       </label>
     </div>
-    <div class="detail to-trip">
+    <div class="detail to-trip" data-container="to">
       <div class="calendar">
         <span class="title">去程日期</span>
         @include('shared.datepicker', [
@@ -37,6 +37,12 @@
         @include('shared.ticket_price_calculate', [
           'types' => $seatTypes ?? [],
         ])
+      </div>
+      <div>
+        <span>乘客資訊</span>
+        <div id="to-jexcel" data-fn="jexcel"></div>
+        <button type="button" data-action="add">新增</button>
+        <button type="button" data-action="get">get</button>
       </div>
     </div>
     <div class="contact-info">

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,7 +71,7 @@
 
 
 var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(25);
+var isBuffer = __webpack_require__(27);
 
 /*global toString:true*/
 
@@ -10752,7 +10752,7 @@ return jQuery;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(28);
+var normalizeHeaderName = __webpack_require__(30);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -10842,7 +10842,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
 
 /***/ }),
 /* 3 */
@@ -10870,12 +10870,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(29);
-var buildURL = __webpack_require__(31);
-var parseHeaders = __webpack_require__(32);
-var isURLSameOrigin = __webpack_require__(33);
+var settle = __webpack_require__(31);
+var buildURL = __webpack_require__(33);
+var parseHeaders = __webpack_require__(34);
+var isURLSameOrigin = __webpack_require__(35);
 var createError = __webpack_require__(5);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(34);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(36);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -10972,7 +10972,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(35);
+      var cookies = __webpack_require__(37);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -11056,7 +11056,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(30);
+var enhanceError = __webpack_require__(32);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -11143,7 +11143,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(1),
 			__webpack_require__(9),
-			__webpack_require__(45)
+			__webpack_require__(46)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
@@ -13306,6 +13306,11 @@ var datatables = {
   language: datatableLang
 };
 
+var datepicker = {
+  minDate: new Date(),
+  dateFormat: 'yy-mm-dd'
+};
+
 var timepicker = {
   timeFormat: 'HH:mm',
   interval: 15,
@@ -13316,46 +13321,415 @@ var timepicker = {
 
 module.exports = {
   datatables: datatables,
+  datepicker: datepicker,
   timepicker: timepicker
 };
 
 /***/ }),
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(17);
-
-
-/***/ }),
-/* 17 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(18);
-__webpack_require__(44);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _require = __webpack_require__(10),
+    timepicker = _require.timepicker;
+
+var _require2 = __webpack_require__(50),
+    SeatLayout = _require2.SeatLayout;
+
+var Cruise = function () {
+  function Cruise() {
+    _classCallCheck(this, Cruise);
+
+    this.routesVars = {};
+  }
+
+  _createClass(Cruise, [{
+    key: 'changeDestinationsStatus',
+    value: function changeDestinationsStatus(_ref) {
+      var t = _ref.t,
+          id = _ref.id,
+          value = _ref.value;
+
+      return $.ajax({
+        url: '/api/destinations/' + id,
+        method: 'PUT',
+        data: {
+          value: value
+        }
+      }).done(function (res) {
+        var td = t.closest('td');
+
+        if (value) {
+          td.addClass('active');
+        } else {
+          td.removeClass('active');
+        }
+      });
+    }
+  }, {
+    key: 'destinationsActionHandler',
+    value: function destinationsActionHandler(_ref2) {
+      var target = _ref2.target;
+
+      var t = $(target);
+      var action = t.data('action');
+
+      switch (action) {
+        case 'status':
+          this.changeDestinationsStatus({
+            t: t,
+            id: t.data('id'),
+            value: t.data('value')
+          });
+          break;
+      }
+    }
+  }, {
+    key: 'initDestinationsTable',
+    value: function initDestinationsTable() {
+      this.destTblWrap.find('[data-table-id="destinations"]').click(this.destinationsActionHandler).DataTable().draw(false);
+    }
+  }, {
+    key: 'destinations',
+    value: function destinations(o) {
+      var _this = this;
+
+      var destEl = o.find('[name="name"]')[0];
+      var destTblWrap = o.find('[data-table-wrap]');
+      this.destTblWrap = destTblWrap;
+
+      this.initDestinationsTable();
+
+      o.find('[data-fn="submit"]').click(function (e) {
+        var name = $(destEl).val();
+        name = $.trim(name);
+
+        if (name.length === 0) {
+          alert('empty string');
+          return;
+        }
+
+        var data = {
+          name: name,
+          withResult: 'table'
+        };
+
+        $.post('/api/destinations', data).done(function (res) {
+          destTblWrap.empty().html(res);
+
+          _this.initDestinationsTable();
+        });
+      });
+    }
+  }, {
+    key: 'editRoute',
+    value: function editRoute(o) {
+      var dp = o.find('[data-fn="datepicker"]').datepicker();
+      var tp = o.find('[data-fn="timepicker"]').timepicker(_extends({}, timepicker));
+      var rId = o.find('[name="rId"]').val();
+      var fromDestSel = o.find('[data-fn="fromDest"]');
+      var toDestSel = o.find('[data-fn="toDest"]');
+      var ferrySel = o.find('[data-fn="ferry"]');
+      var redirectUrl = '/cruise/routeList';
+
+      o.find('[data-fn="datepicker-click"]').click(function () {
+        dp.datepicker('show');
+      });
+
+      o.find('[data-fn="submit"]').click(function () {
+        var from = fromDestSel.val();
+        var to = toDestSel.val();
+        var fId = ferrySel.val();
+        var date = dp.val();
+        var time = tp.val();
+
+        if (from === to) {
+          alert('請選擇不同地點');
+          return;
+        }
+
+        if (!date) {
+          alert('請選擇日期');
+          return;
+        }
+
+        if (!time) {
+          alert('請選擇時間');
+          return;
+        }
+
+        date = date.replace(/\//g, '-');
+        time += ':00';
+
+        var data = {
+          from: from,
+          to: to,
+          fId: fId,
+          dt: date + ' ' + time
+        };
+
+        if (rId) {
+          data.rId = rId;
+
+          $.ajax({
+            url: '/api/routes/' + rId,
+            method: 'PUT',
+            data: data
+          }).done(function (res) {
+            window.location.replace(redirectUrl);
+          });
+        } else {
+          $.post('/api/routes', data).done(function (res) {
+            window.location.replace(redirectUrl);
+          });
+        }
+      });
+
+      o.find('[data-fn="back"]').click(function () {
+        window.history.back();
+      });
+    }
+  }, {
+    key: 'routesTableUpdateStatus',
+    value: function routesTableUpdateStatus(target, status) {
+      var _routesVars = this.routesVars,
+          statusMap = _routesVars.statusMap,
+          table = _routesVars.table;
+
+      var tr = target.closest('tr[data-row-index]');
+      var rowIndex = tr.data('rowIndex');
+      var currentStatusName = tr.find('[data-cell-key="status"]').html();
+      var data = table.row(rowIndex).data();
+
+      tr.removeClass('active pending cancelled completed');
+
+      switch (status) {
+        case 'active':
+          tr.addClass('active');
+          break;
+        case 'cancelled':
+          tr.addClass('cancelled');
+          break;
+      }
+
+      data[data.indexOf(currentStatusName)] = statusMap[status];
+      table.row(rowIndex).data(data).draw();
+    }
+  }, {
+    key: 'routesActionHandler',
+    value: function routesActionHandler(_ref3) {
+      var _this2 = this;
+
+      var target = _ref3.target;
+
+      var t = $(target);
+      var id = t.data('id');
+
+      switch (t.data('action')) {
+        case 'activate':
+          if (!window.confirm('確定要開啟此航班')) {
+            return;
+          }
+
+          $.post('/api/routes/updateStatus', {
+            id: id,
+            status: 'active'
+          }).done(function () {
+            return _this2.routesTableUpdateStatus(t, 'active');
+          });
+          break;
+        case 'cancel':
+          if (!window.confirm('確定要停售此航班')) {
+            return;
+          }
+
+          // loading icon
+          // get if ticket sold
+          // if has ticket confirm('refund')
+          $.post('/api/routes/updateStatus', {
+            id: id,
+            status: 'cancelled'
+          }).done(function () {
+            return _this2.routesTableUpdateStatus(t, 'cancelled');
+          });
+          break;
+        case 'delete':
+          var table = this.routesVars.table;
+
+
+          $.ajax({
+            url: '/api/routes/' + id,
+            method: 'DELETE'
+          }).done(function () {
+            var table = _this2.routesVars.table;
+
+
+            var rowIndex = t.closest('tr[data-row-index]').data('rowIndex');
+
+            table.row(rowIndex).remove().draw();
+          });
+          break;
+        case 'reserve':
+          var fId = t.data('fid');
+          var seatLayoutContainer = this.routesVars.seatLayoutContainer;
+
+
+          $.get('/api/seats/layout', { rId: id, fId: fId }).done(function (res) {
+            seatLayoutContainer.empty();
+            seatLayoutContainer.html(res);
+            new SeatLayout({
+              action: 'reserve',
+              o: seatLayoutContainer.find('[data-fn="seatLayout"]')
+            });
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }, {
+    key: 'routeList',
+    value: function routeList(o) {
+      var routesVars = this.routesVars;
+
+      var pathname = window.location.pathname;
+      var table = o.find('[data-table-id="routes"]');
+      var dp = o.find('[data-fn="datepicker"]').datepicker({
+        minDate: null,
+        onSelect: function onSelect(dateText) {
+          var _window = window,
+              pathname = _window.location.pathname;
+
+          var d = encodeURIComponent(dateText);
+
+          window.location.href = pathname + '?d=' + d;
+        }
+      });
+
+      routesVars.statusMap = table.data('statusMap');
+      routesVars.table = table.click(this.routesActionHandler).DataTable({
+        searching: true,
+        paging: true,
+        pageLength: 20,
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "全部"]]
+      });
+      routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
+
+      o.find('[data-fn="datepicker-click"]').click(function () {
+        dp.datepicker('show');
+      });
+    }
+  }]);
+
+  return Cruise;
+}();
+
+module.exports = Cruise;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Order = function () {
+  function Order() {
+    _classCallCheck(this, Order);
+  }
+
+  _createClass(Order, [{
+    key: 'editOrder',
+    value: function editOrder(o) {
+      var dp = o.find('[data-fn="datepicker"]').datepicker();
+
+      o.find('[data-fn="datepicker-click"]').click(function () {
+        dp.datepicker('show');
+      });
+
+      /*
+      $('#jexcel').jexcel({
+        data: [
+          ['hi'],
+          ['wtf'],
+          ['shit'],
+        ],
+      });
+      */
+      o.find('[data-container]').each(function (i, el) {
+        var jE = $(el).find('[data-fn="jexcel"]');
+
+        $(el).find('[data-action="add"]').click(function () {
+          jE.jexcel('insertRow', 1);
+        });
+
+        $(el).find('[data-action="get"]').click(function () {
+          var data = jE.jexcel('getData');
+          console.log(data);
+        });
+
+        jE.jexcel({
+          colHeaders: ['姓', '名', '身份證 / 護照', 'ID', '姓別', '生日', 'Email', '電話號碼', '艙等'],
+          colWidths: [100, 100, 100, 100, 100, 100, 100, 100, 100],
+          columns: [{ type: 'string' }, { type: 'string' }, { type: 'autocomplete', source: ['<span data-val=id>身份證</span>', '<span data-val=passport>護照</span>'] }, { type: 'string' }, { type: 'autocomplete', source: ['<span data-val=1>男</span>', '<span data-val=0>女</span>'] }, { type: 'string' }, { type: 'string' }, { type: 'string' }, { type: 'autocomplete', source: ['<span data-val=E>經濟艙</span>', '<span data-val=B>商務艙</span>'] }],
+          data: []
+        });
+      });
+    }
+  }]);
+
+  return Order;
+}();
+
+module.exports = Order;
+
+/***/ }),
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(19);
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(20);
+__webpack_require__(45);
 __webpack_require__(8);
-__webpack_require__(46);
+__webpack_require__(48);
+__webpack_require__(47);
 
 var doms = ['cruise', 'order'];
 
-$(function () {
-  __webpack_require__(48);
-
+$(window).on('load', function () {
   var _require = __webpack_require__(10),
-      datatables = _require.datatables;
+      datatables = _require.datatables,
+      datepicker = _require.datepicker;
 
   $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
 
-  $.datepicker.setDefaults({
-    minDate: new Date()
-  });
+  $.datepicker.setDefaults(datepicker);
 
   $.each(doms, function (i, key) {
     var o = $('#' + key);
@@ -13372,7 +13746,7 @@ $(function () {
     var fn = void 0;
 
     try {
-      fn = __webpack_require__(77)("./" + k);
+      fn = __webpack_require__(49)("./" + k);
     } catch (err) {
       console.error('Class "' + k + '" does not exist');
       return;
@@ -13414,11 +13788,11 @@ $(function () {
 });
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(19);
+window._ = __webpack_require__(21);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -13429,7 +13803,7 @@ window._ = __webpack_require__(19);
 try {
   window.$ = window.jQuery = __webpack_require__(1);
 
-  __webpack_require__(22);
+  __webpack_require__(24);
 } catch (e) {}
 
 /**
@@ -13438,7 +13812,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(23);
+window.axios = __webpack_require__(25);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -13474,7 +13848,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -30584,10 +30958,10 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20), __webpack_require__(21)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22), __webpack_require__(23)(module)))
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports) {
 
 var g;
@@ -30614,7 +30988,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -30642,7 +31016,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /*!
@@ -33025,13 +33399,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(24);
+module.exports = __webpack_require__(26);
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33039,7 +33413,7 @@ module.exports = __webpack_require__(24);
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(3);
-var Axios = __webpack_require__(26);
+var Axios = __webpack_require__(28);
 var defaults = __webpack_require__(2);
 
 /**
@@ -33074,14 +33448,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(7);
-axios.CancelToken = __webpack_require__(41);
+axios.CancelToken = __webpack_require__(43);
 axios.isCancel = __webpack_require__(6);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(42);
+axios.spread = __webpack_require__(44);
 
 module.exports = axios;
 
@@ -33090,7 +33464,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /*!
@@ -33117,7 +33491,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33125,8 +33499,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(36);
-var dispatchRequest = __webpack_require__(37);
+var InterceptorManager = __webpack_require__(38);
+var dispatchRequest = __webpack_require__(39);
 
 /**
  * Create a new instance of Axios
@@ -33203,7 +33577,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -33393,7 +33767,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33412,7 +33786,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33445,7 +33819,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33473,7 +33847,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33548,7 +33922,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33608,7 +33982,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33683,7 +34057,7 @@ module.exports = (
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33726,7 +34100,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33786,7 +34160,7 @@ module.exports = (
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33845,18 +34219,18 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(38);
+var transformData = __webpack_require__(40);
 var isCancel = __webpack_require__(6);
 var defaults = __webpack_require__(2);
-var isAbsoluteURL = __webpack_require__(39);
-var combineURLs = __webpack_require__(40);
+var isAbsoluteURL = __webpack_require__(41);
+var combineURLs = __webpack_require__(42);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -33938,7 +34312,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33965,7 +34339,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33986,7 +34360,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34007,7 +34381,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34071,7 +34445,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34105,316 +34479,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _require = __webpack_require__(10),
-    timepicker = _require.timepicker;
-
-var _require2 = __webpack_require__(47),
-    SeatLayout = _require2.SeatLayout;
-
-var Cruise = function () {
-  function Cruise() {
-    _classCallCheck(this, Cruise);
-
-    this.routesVars = {};
-  }
-
-  _createClass(Cruise, [{
-    key: 'changeDestinationsStatus',
-    value: function changeDestinationsStatus(_ref) {
-      var t = _ref.t,
-          id = _ref.id,
-          value = _ref.value;
-
-      return $.ajax({
-        url: '/api/destinations/' + id,
-        method: 'PUT',
-        data: {
-          value: value
-        }
-      }).done(function (res) {
-        var td = t.closest('td');
-
-        if (value) {
-          td.addClass('active');
-        } else {
-          td.removeClass('active');
-        }
-      });
-    }
-  }, {
-    key: 'destinationsActionHandler',
-    value: function destinationsActionHandler(_ref2) {
-      var target = _ref2.target;
-
-      var t = $(target);
-      var action = t.data('action');
-
-      switch (action) {
-        case 'status':
-          this.changeDestinationsStatus({
-            t: t,
-            id: t.data('id'),
-            value: t.data('value')
-          });
-          break;
-      }
-    }
-  }, {
-    key: 'initDestinationsTable',
-    value: function initDestinationsTable() {
-      this.destTblWrap.find('[data-table-id="destinations"]').click(this.destinationsActionHandler).DataTable().draw(false);
-    }
-  }, {
-    key: 'destinations',
-    value: function destinations(o) {
-      var _this = this;
-
-      var destEl = o.find('[name="name"]')[0];
-      var destTblWrap = o.find('[data-table-wrap]');
-      this.destTblWrap = destTblWrap;
-
-      this.initDestinationsTable();
-
-      o.find('[data-fn="submit"]').click(function (e) {
-        var name = $(destEl).val();
-        name = $.trim(name);
-
-        if (name.length === 0) {
-          alert('empty string');
-          return;
-        }
-
-        var data = {
-          name: name,
-          withResult: 'table'
-        };
-
-        $.post('/api/destinations', data).done(function (res) {
-          destTblWrap.empty().html(res);
-
-          _this.initDestinationsTable();
-        });
-      });
-    }
-  }, {
-    key: 'editRoute',
-    value: function editRoute(o) {
-      var dp = o.find('[data-fn="datepicker"]').datepicker();
-      var tp = o.find('[data-fn="timepicker"]').timepicker(_extends({}, timepicker));
-      var rId = o.find('[name="rId"]').val();
-      var fromDestSel = o.find('[data-fn="fromDest"]');
-      var toDestSel = o.find('[data-fn="toDest"]');
-      var ferrySel = o.find('[data-fn="ferry"]');
-      var redirectUrl = '/cruise/routeList';
-
-      o.find('[data-fn="datepicker-click"]').click(function () {
-        dp.datepicker('show');
-      });
-
-      o.find('[data-fn="submit"]').click(function () {
-        var from = fromDestSel.val();
-        var to = toDestSel.val();
-        var fId = ferrySel.val();
-        var date = dp.val();
-        var time = tp.val();
-
-        if (from === to) {
-          alert('請選擇不同地點');
-          return;
-        }
-
-        if (!date) {
-          alert('請選擇日期');
-          return;
-        }
-
-        if (!time) {
-          alert('請選擇時間');
-          return;
-        }
-
-        date = date.replace(/\//g, '-');
-        time += ':00';
-
-        var data = {
-          from: from,
-          to: to,
-          fId: fId,
-          dt: date + ' ' + time
-        };
-
-        if (rId) {
-          data.rId = rId;
-
-          $.ajax({
-            url: '/api/routes/' + rId,
-            method: 'PUT',
-            data: data
-          }).done(function (res) {
-            window.location.replace(redirectUrl);
-          });
-        } else {
-          $.post('/api/routes', data).done(function (res) {
-            window.location.replace(redirectUrl);
-          });
-        }
-      });
-
-      o.find('[data-fn="back"]').click(function () {
-        window.history.back();
-      });
-    }
-  }, {
-    key: 'routesTableUpdateStatus',
-    value: function routesTableUpdateStatus(target, status) {
-      var _routesVars = this.routesVars,
-          statusMap = _routesVars.statusMap,
-          table = _routesVars.table;
-
-      var tr = target.closest('tr[data-row-index]');
-      var rowIndex = tr.data('rowIndex');
-      var currentStatusName = tr.find('[data-cell-key="status"]').html();
-      var data = table.row(rowIndex).data();
-
-      tr.removeClass('active pending cancelled completed');
-
-      switch (status) {
-        case 'active':
-          tr.addClass('active');
-          break;
-        case 'cancelled':
-          tr.addClass('cancelled');
-          break;
-      }
-
-      data[data.indexOf(currentStatusName)] = statusMap[status];
-      table.row(rowIndex).data(data).draw();
-    }
-  }, {
-    key: 'routesActionHandler',
-    value: function routesActionHandler(_ref3) {
-      var _this2 = this;
-
-      var target = _ref3.target;
-
-      var t = $(target);
-      var id = t.data('id');
-
-      switch (t.data('action')) {
-        case 'activate':
-          if (!window.confirm('確定要開啟此航班')) {
-            return;
-          }
-
-          $.post('/api/routes/updateStatus', {
-            id: id,
-            status: 'active'
-          }).done(function () {
-            return _this2.routesTableUpdateStatus(t, 'active');
-          });
-          break;
-        case 'cancel':
-          if (!window.confirm('確定要停售此航班')) {
-            return;
-          }
-
-          // loading icon
-          // get if ticket sold
-          // if has ticket confirm('refund')
-          $.post('/api/routes/updateStatus', {
-            id: id,
-            status: 'cancelled'
-          }).done(function () {
-            return _this2.routesTableUpdateStatus(t, 'cancelled');
-          });
-          break;
-        case 'delete':
-          var table = this.routesVars.table;
-
-
-          $.ajax({
-            url: '/api/routes/' + id,
-            method: 'DELETE'
-          }).done(function () {
-            var table = _this2.routesVars.table;
-
-
-            var rowIndex = t.closest('tr[data-row-index]').data('rowIndex');
-
-            table.row(rowIndex).remove().draw();
-          });
-          break;
-        case 'reserve':
-          var fId = t.data('fid');
-          var seatLayoutContainer = this.routesVars.seatLayoutContainer;
-
-
-          $.get('/api/seats/layout', { rId: id, fId: fId }).done(function (res) {
-            seatLayoutContainer.empty();
-            seatLayoutContainer.html(res);
-            new SeatLayout({
-              action: 'reserve',
-              o: seatLayoutContainer.find('[data-fn="seatLayout"]')
-            });
-          });
-          break;
-        default:
-          break;
-      }
-    }
-  }, {
-    key: 'routeList',
-    value: function routeList(o) {
-      var routesVars = this.routesVars;
-
-      var pathname = window.location.pathname;
-      var table = o.find('[data-table-id="routes"]');
-      var dp = o.find('[data-fn="datepicker"]').datepicker({
-        minDate: null,
-        onSelect: function onSelect(dateText) {
-          var _window = window,
-              pathname = _window.location.pathname;
-
-          var d = encodeURIComponent(dateText);
-
-          window.location.href = pathname + '?d=' + d;
-        }
-      });
-
-      routesVars.statusMap = table.data('statusMap');
-      routesVars.table = table.click(this.routesActionHandler).DataTable({
-        searching: true,
-        paging: true,
-        pageLength: 20,
-        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "全部"]]
-      });
-      routesVars.seatLayoutContainer = o.find('[data-fn="seatLayoutContainer"]');
-
-      o.find('[data-fn="datepicker-click"]').click(function () {
-        dp.datepicker('show');
-      });
-    }
-  }]);
-
-  return Cruise;
-}();
-
-module.exports = Cruise;
-
-/***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
@@ -49717,7 +49782,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -49771,7 +49836,7 @@ return $.ui.keyCode = {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports) {
 
 /**
@@ -50635,7 +50700,79 @@ if (typeof jQuery !== 'undefined') {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* Chinese initialisation for the jQuery UI date picker plugin. */
+/* Written by Ressol (ressol@gmail.com). */
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(8) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}( function( datepicker ) {
+
+datepicker.regional[ "zh-TW" ] = {
+	closeText: "關閉",
+	prevText: "&#x3C;上月",
+	nextText: "下月&#x3E;",
+	currentText: "今天",
+	monthNames: [ "一月","二月","三月","四月","五月","六月",
+	"七月","八月","九月","十月","十一月","十二月" ],
+	monthNamesShort: [ "一月","二月","三月","四月","五月","六月",
+	"七月","八月","九月","十月","十一月","十二月" ],
+	dayNames: [ "星期日","星期一","星期二","星期三","星期四","星期五","星期六" ],
+	dayNamesShort: [ "周日","周一","周二","周三","周四","周五","周六" ],
+	dayNamesMin: [ "日","一","二","三","四","五","六" ],
+	weekHeader: "周",
+	dateFormat: "yy/mm/dd",
+	firstDay: 1,
+	isRTL: false,
+	showMonthAfterYear: true,
+	yearSuffix: "年" };
+datepicker.setDefaults( datepicker.regional[ "zh-TW" ] );
+
+return datepicker.regional[ "zh-TW" ];
+
+} ) );
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./Cruise": 11,
+	"./Cruise.js": 11,
+	"./Order": 12,
+	"./Order.js": 12
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 49;
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50884,139 +51021,6 @@ exports.SeatLayout = function () {
 
   return SeatLayout;
 }();
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* Chinese initialisation for the jQuery UI date picker plugin. */
-/* Written by Ressol (ressol@gmail.com). */
-( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(8) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery.datepicker );
-	}
-}( function( datepicker ) {
-
-datepicker.regional[ "zh-TW" ] = {
-	closeText: "關閉",
-	prevText: "&#x3C;上月",
-	nextText: "下月&#x3E;",
-	currentText: "今天",
-	monthNames: [ "一月","二月","三月","四月","五月","六月",
-	"七月","八月","九月","十月","十一月","十二月" ],
-	monthNamesShort: [ "一月","二月","三月","四月","五月","六月",
-	"七月","八月","九月","十月","十一月","十二月" ],
-	dayNames: [ "星期日","星期一","星期二","星期三","星期四","星期五","星期六" ],
-	dayNamesShort: [ "周日","周一","周二","周三","周四","周五","周六" ],
-	dayNamesMin: [ "日","一","二","三","四","五","六" ],
-	weekHeader: "周",
-	dateFormat: "yy/mm/dd",
-	firstDay: 1,
-	isRTL: false,
-	showMonthAfterYear: true,
-	yearSuffix: "年" };
-datepicker.setDefaults( datepicker.regional[ "zh-TW" ] );
-
-return datepicker.regional[ "zh-TW" ];
-
-} ) );
-
-
-/***/ }),
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./Cruise": 43,
-	"./Cruise.js": 43,
-	"./Order": 78,
-	"./Order.js": 78
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 77;
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Order = function () {
-  function Order() {
-    _classCallCheck(this, Order);
-  }
-
-  _createClass(Order, [{
-    key: 'editOrder',
-    value: function editOrder(o) {
-      console.log('o ==================>', o);
-      var dp = o.find('[data-fn="datepicker"]').datepicker();
-
-      o.find('[data-fn="datepicker-click"]').click(function () {
-        dp.datepicker('show');
-      });
-    }
-  }]);
-
-  return Order;
-}();
-
-module.exports = Order;
 
 /***/ })
 /******/ ]);

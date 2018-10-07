@@ -2,22 +2,21 @@
 require('./bootstrap');
 require('datatables.net');
 require('jquery-ui/ui/widgets/datepicker');
+require('jquery-ui/ui/i18n/datepicker-zh-TW');
 require('jquery-timepicker/jquery.timepicker');
 
 const doms = ['cruise', 'order'];
 
-$(function () {
-  require('jquery-ui/ui/i18n/datepicker-zh-TW');
+$(window).on('load', function () {
 
   const {
     datatables,
+    datepicker,
   } = require('./global');
 
   $.extend(true, $.fn.DataTable.defaults, datatables.defaults);
 
-  $.datepicker.setDefaults({
-    minDate: new Date(),
-  });
+  $.datepicker.setDefaults(datepicker);
 
   $.each(doms, (i, key) => {
     const o = $('#' + key);

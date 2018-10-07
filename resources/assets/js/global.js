@@ -32,6 +32,10 @@ const datatables = {
   language: datatableLang,
 };
 
+const datepicker = {
+  minDate: new Date(),
+  dateFormat: 'yy-mm-dd',
+};
 
 const timepicker = {
   timeFormat: 'HH:mm',
@@ -43,5 +47,6 @@ const timepicker = {
 
 module.exports = {
   datatables,
+  datepicker,
   timepicker,
 };

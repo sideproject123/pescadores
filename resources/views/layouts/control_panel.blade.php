@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ __('title') }}</title>
   <link href="//fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.css" rel="stylesheet" type="text/css" />
   <link href="{{ asset('css/control_panel.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -38,5 +39,6 @@
     </div>
   </div>
   <script src="{{ asset('js/control_panel.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
 </body>
 </html>
